@@ -13,16 +13,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.homi.R
 
 @Composable
-fun TampilanAwalScreen(
+fun TampilanAwalScreen2(
     onNextClicked: () -> Unit = {}
 ) {
-    // font
+    // Font khusus
     val laBelleAurore = FontFamily(Font(R.font.la_belle_aurore))
     val poppins = FontFamily(Font(R.font.poppins_semibold))
 
@@ -44,37 +45,23 @@ fun TampilanAwalScreen(
             verticalArrangement = Arrangement.Bottom
         ) {
             Text(
-                text = "Selamat Datang",
-                fontSize = 28.sp,
+                text = "Optimalisasi Layanan Warga dalam Satu Aplikasi",
+                fontSize = 26.sp,
                 fontWeight = FontWeight.Bold,
                 fontFamily = poppins,
-                color = Color.White
+                color = Color.White,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
             )
-            Row {
-                Text(
-                    text = "di ",
-                    fontSize = 26.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = poppins,
-                    color = Color.White
-                )
-                Text(
-                    text = "Homi",
-                    fontSize = 30.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = laBelleAurore,
-                    color = Color(0xFFF7C0A2)
-                )
-            }
 
-            Spacer(modifier = Modifier.height(70.dp))
+            Spacer(modifier = Modifier.height(90.dp))
 
             Box(
                 modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.BottomEnd
             ) {
                 Text(
-                    text = "Selanjutnya",
+                    text = "Mulai",
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     fontFamily = poppins,
@@ -88,8 +75,8 @@ fun TampilanAwalScreen(
 
 @Preview(showSystemUi = true)
 @Composable
-fun PreviewTampilanAwal() {
+fun PreviewTampilanAwal2() {
     MaterialTheme {
-        TampilanAwalScreen()
+        TampilanAwalScreen2()
     }
 }
