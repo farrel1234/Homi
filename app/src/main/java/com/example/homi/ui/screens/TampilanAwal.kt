@@ -45,7 +45,7 @@ fun TampilanAwalScreen(
         ) {
             Text(
                 text = "Selamat Datang",
-                fontSize = 28.sp,
+                fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
                 fontFamily = poppins,
                 color = Color.White
@@ -53,7 +53,7 @@ fun TampilanAwalScreen(
             Row {
                 Text(
                     text = "di ",
-                    fontSize = 26.sp,
+                    fontSize = 22.sp,
                     fontWeight = FontWeight.Bold,
                     fontFamily = poppins,
                     color = Color.White
@@ -75,7 +75,7 @@ fun TampilanAwalScreen(
             ) {
                 Text(
                     text = "Selanjutnya",
-                    fontSize = 16.sp,
+                    fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
                     fontFamily = poppins,
                     color = Color.White,

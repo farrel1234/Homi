@@ -46,7 +46,7 @@ fun TampilanAwalScreen2(
         ) {
             Text(
                 text = "Optimalisasi Layanan Warga dalam Satu Aplikasi",
-                fontSize = 26.sp,
+                fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
                 fontFamily = poppins,
                 color = Color.White,
@@ -61,8 +61,8 @@ fun TampilanAwalScreen2(
                 contentAlignment = Alignment.BottomEnd
             ) {
                 Text(
-                    text = "Mulai",
-                    fontSize = 16.sp,
+                    text = "Selanjutnya",
+                    fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
                     fontFamily = poppins,
                     color = Color.White,

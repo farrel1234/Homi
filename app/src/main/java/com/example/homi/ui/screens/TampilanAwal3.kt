@@ -46,7 +46,7 @@ fun TampilanAwalScreen3(
         ) {
             Text(
                 text = "Menghubungkan Warga, Membangun Kebersamaan",
-                fontSize = 24.sp,
+                fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
                 fontFamily = poppins,               // pakai Poppins
                 color = Color.White,
@@ -61,8 +61,8 @@ fun TampilanAwalScreen3(
                 contentAlignment = Alignment.BottomEnd
             ) {
                 Text(
-                    text = "Selanjutnya",
-                    fontSize = 16.sp,
+                    text = "Mulai",
+                    fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
                     fontFamily = poppins,           // pakai Poppins juga
                     color = Color.White,
