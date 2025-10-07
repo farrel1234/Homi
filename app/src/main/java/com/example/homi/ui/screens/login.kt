@@ -63,8 +63,7 @@ fun LoginScreen(
                     .fillMaxWidth()
                     .padding(bottom = 16.dp)
             )
-
-            // Email / Username Field
+            
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
@@ -83,7 +82,6 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // Password Field
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
