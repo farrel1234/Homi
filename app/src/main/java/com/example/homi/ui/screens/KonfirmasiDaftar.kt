@@ -51,6 +51,7 @@ fun KonfirmasiDaftarScreen() {
             contentScale = ContentScale.Crop
         )
 
+        // 🔹 Konten di atas background
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -59,7 +60,6 @@ fun KonfirmasiDaftarScreen() {
         ) {
             Spacer(modifier = Modifier.height(40.dp))
 
-            // 🔹 Judul
             Text(
                 text = "Konfirmasi Pendaftaran",
                 fontFamily = poppins,
@@ -70,90 +70,82 @@ fun KonfirmasiDaftarScreen() {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // 🔹 Gambar amplop di tengah
             Image(
                 painter = painterResource(id = R.drawable.amplop),
                 contentDescription = "Amplop Icon",
                 modifier = Modifier.size(210.dp)
             )
 
-            Spacer(modifier = Modifier.height(70.dp)) // posisi pas biar card nempel ke panah
+            Spacer(modifier = Modifier.height(55.dp))
 
-            // 🔹 Card OTP dengan border biru
-            Card(
-                shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .border(2.dp, Color(0xFF2E6F8E), RoundedCornerShape(16.dp))
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Column(
+                Text(
+                    text = "Kode OTP",
+                    fontFamily = poppins,
+                    fontSize = 19.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(20.dp)
-                ) {
-                    Text(
-                        text = "Kode OTP",
-                        fontFamily = poppins,
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black
-                    )
+                        .padding(start = 20.dp),
+                    textAlign = TextAlign.Start
+                )
 
-                    Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
-                    OutlinedTextField(
-                        value = otpCode,
-                        onValueChange = { otpCode = it },
-                        singleLine = true,
-                        shape = RoundedCornerShape(8.dp),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = Color(0xFF2E6F8E),
-                            unfocusedBorderColor = Color(0xFF2E6F8E)
-                        ),
-                        modifier = Modifier.fillMaxWidth()
-                    )
+                OutlinedTextField(
+                    value = otpCode,
+                    onValueChange = { otpCode = it },
+                    singleLine = true,
+                    shape = RoundedCornerShape(8.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color(0xFF2E6F8E),
+                        unfocusedBorderColor = Color(0xFF2E6F8E),
+                        focusedContainerColor = Color(0xFFF5F5F5),
+                        unfocusedContainerColor = Color(0xFFF5F5F5),
+                        cursorColor = Color(0xFF2E6F8E)
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth(0.90f)
+                        .align(Alignment.CenterHorizontally)
+                )
 
-                    Spacer(modifier = Modifier.height(6.dp))
 
-                    Text(
-                        text = "*Masukkan kode yang sudah dikirimkan ke alamat Email Anda",
-                        fontFamily = poppinsRegular,
-                        fontSize = 10.sp,
-                        color = Color.Gray
-                    )
+                Spacer(modifier = Modifier.height(6.dp))
 
-                    Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "*Masukkan kode yang sudah dikirimkan ke alamat Email Anda",
+                    fontFamily = poppinsRegular,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 12.sp,
+                    color = Color.Gray,
+                    textAlign = TextAlign.Start,
+                    modifier = Modifier
+                        .fillMaxWidth(0.90f)
+                        .align(Alignment.CenterHorizontally)
+                        .padding(start = 12.dp)
+                )
 
-                    Text(
-                        text = "Kirim Ulang Kode : 00.30",
-                        fontFamily = poppins,
-                        fontSize = 11.sp,
-                        fontWeight = FontWeight.Medium,
-                        color = Color.Gray,
-                        textAlign = TextAlign.End,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
-            }
 
-            // 🔹 Tombol panah (berdenyut) nempel ke card
-            Box(
-                modifier = Modifier
-                    .offset(y = (-30).dp) // posisi pas nempel ke card
-                    .scale(scaleAnim)
-                    .size(60.dp)
-                    .clip(CircleShape)
-                    .background(Color(0xFFF4A77E)),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.panah),
-                    contentDescription = "Arrow Icon",
-                    tint = Color.White,
-                    modifier = Modifier.size(30.dp)
+                Spacer(modifier = Modifier.height(38.dp))
+
+                Text(
+                    text = "Kirim Ulang Kode : 00.30",
+                    fontFamily = poppins,
+                    fontSize = 11.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = Color.Gray,
+                    textAlign = TextAlign.End,
+                    modifier = Modifier
+                        .fillMaxWidth(0.90f)
+                        .align(Alignment.CenterHorizontally)
+                        .padding(end = 2.dp)
                 )
             }
+
         }
     }
 }
