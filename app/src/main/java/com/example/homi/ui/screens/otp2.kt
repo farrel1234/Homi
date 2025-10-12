@@ -28,7 +28,7 @@ fun Otp3Screen() {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        // 🔹 Background utama
+
         Image(
             painter = painterResource(id = R.drawable.konfirmasi_pendaftaran),
             contentDescription = "Background OTP",
@@ -36,7 +36,6 @@ fun Otp3Screen() {
             contentScale = ContentScale.Crop
         )
 
-        // 🔹 Kolom atas berisi judul dan amplop
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -64,14 +63,14 @@ fun Otp3Screen() {
             Spacer(modifier = Modifier.height(55.dp))
         }
 
-        // 🔹 Layer hitam transparan untuk efek fokus
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0x55000000)), // sedikit transparan, lebih halus
+                .background(Color(0x55000000)),
             contentAlignment = Alignment.Center
         ) {
-            // 🔹 Card putih berisi awan sedih dan pesan
+
             Card(
                 shape = RoundedCornerShape(20.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White),
@@ -110,7 +109,6 @@ fun Otp3Screen() {
             }
         }
 
-        // 🔹 Notifikasi di atas card
         Box(
             modifier = Modifier
                 .fillMaxSize(),
