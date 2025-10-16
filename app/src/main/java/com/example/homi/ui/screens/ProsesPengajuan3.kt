@@ -75,7 +75,7 @@ fun ProsesPengajuan3(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(R.drawable.panahkembali), // ✅ ganti ke ikon panah.png kamu
+                painter = painterResource(R.drawable.panahkembali),
                 contentDescription = "Kembali",
                 modifier = Modifier
                     .size(24.dp)

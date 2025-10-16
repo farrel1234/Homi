@@ -32,7 +32,7 @@ fun DetailPengumumanScreen() {
             .background(Color(0xFFEFEFEF))
     ) {
         Image(
-            painter = painterResource(id = R.drawable.img_pengumuman), // ganti sesuai drawable kamu
+            painter = painterResource(id = R.drawable.img_pengumuman),
             contentDescription = "Header Image",
             contentScale = ContentScale.Crop,
             modifier = Modifier
