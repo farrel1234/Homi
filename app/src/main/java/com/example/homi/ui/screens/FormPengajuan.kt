@@ -22,15 +22,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.homi.R
+import androidx.compose.foundation.layout.statusBarsPadding
 
-
-/* ===== Theme tokens (konsisten dengan screen sebelumnya) ===== */
+/* ===== Theme tokens ===== */
 private val BlueMain     = Color(0xFF2F7FA3)
 private val BlueBorder   = Color(0xFF2F7FA3)
 private val BlueText     = Color(0xFF2F7FA3)
@@ -47,8 +45,8 @@ private val PoppinsReg  = FontFamily(Font(R.font.poppins_regular))
 fun FormPengaduanScreen(
     onBack: (() -> Unit)? = null,
     onKonfirmasi: ((nama: String, tanggal: String, tempat: String, perihal: String) -> Unit)? = null,
-    @DrawableRes backIcon: Int = R.drawable.panah,           // panah.png
-    @DrawableRes icUpload: Int = R.drawable.kamera           // ganti ke ic_camera kalau ada
+    @DrawableRes backIcon: Int = R.drawable.panahkembali,
+    @DrawableRes icUpload: Int = R.drawable.kamera
 ) {
     // state input
     var nama by remember { mutableStateOf("") }
@@ -70,7 +68,7 @@ fun FormPengaduanScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(id = R.drawable.panahkembali),
+                painter = painterResource(id = backIcon),
                 contentDescription = "Kembali",
                 modifier = Modifier
                     .size(24.dp)
@@ -83,10 +81,9 @@ fun FormPengaduanScreen(
                 fontFamily = PoppinsSemi,
                 fontSize = 22.sp,
                 color = Color.White,
-                modifier = Modifier.weight(1f),
-                textAlign = TextAlign.Center
+                modifier = Modifier.weight(1f)
             )
-            Spacer(Modifier.width(24.dp))
+            Spacer(Modifier.width(24.dp)) // spacer dummy agar judul tetap center
         }
 
         /* Subjudul */
@@ -95,15 +92,15 @@ fun FormPengaduanScreen(
             fontFamily = PoppinsReg,
             fontSize = 12.sp,
             color = Color.White,
-            textAlign = TextAlign.Center,
             lineHeight = 18.sp,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 24.dp)
+                .padding(horizontal = 24.dp),
         )
+
         Spacer(Modifier.height(16.dp))
+
         /* Kontainer putih rounded */
-        Spacer(Modifier.height(16.dp))
         Card(
             modifier = Modifier.fillMaxSize(),
             shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
@@ -116,7 +113,8 @@ fun FormPengaduanScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Spacer(Modifier.height(16.dp))
-                // Card form dengan border biru dan sudut bulat
+
+                // Card form dengan border biru
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(16.dp),
@@ -139,7 +137,7 @@ fun FormPengaduanScreen(
                         FieldLabel("Tanggal")
                         UnderlineTextField(
                             value = tanggal,
-                            onValueChange = { tanggal = it }, // bisa dihubungkan ke date picker eksternal
+                            onValueChange = { tanggal = it } // bisa dihubungkan ke date picker
                         )
 
                         Spacer(Modifier.height(16.dp))
@@ -164,9 +162,7 @@ fun FormPengaduanScreen(
 
                         // Upload Foto
                         FieldLabel("Upload Foto")
-                        Column(
-                            horizontalAlignment = Alignment.Start
-                        ) {
+                        Column(horizontalAlignment = Alignment.Start) {
                             Box(
                                 modifier = Modifier
                                     .size(96.dp)
@@ -175,7 +171,7 @@ fun FormPengaduanScreen(
                                 contentAlignment = Alignment.Center
                             ) {
                                 Image(
-                                    painter = painterResource(id = R.drawable.kamera),
+                                    painter = painterResource(id = icUpload),
                                     contentDescription = "Upload",
                                     contentScale = ContentScale.Fit,
                                     modifier = Modifier.size(46.dp)
@@ -195,36 +191,30 @@ fun FormPengaduanScreen(
 
                 Spacer(Modifier.height(24.dp))
 
-                // Tombol Konfirmasi oranye + bayangan lembut
-                Box(
+                // Tombol Konfirmasi
+                Button(
+                    onClick = { onKonfirmasi?.invoke(nama, tanggal, tempat, perihal) },
                     modifier = Modifier
-                        .fillMaxWidth(),
-                    contentAlignment = Alignment.Center
+                        .fillMaxWidth()
+                        .height(48.dp)
+                        .shadow(8.dp, RoundedCornerShape(24.dp)),
+                    colors = ButtonDefaults.buttonColors(containerColor = AccentOrange),
+                    shape = RoundedCornerShape(24.dp),
+                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
                 ) {
-                    Button(
-                        onClick = { onKonfirmasi?.invoke(nama, tanggal, tempat, perihal) },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(48.dp)
-                            .shadow(8.dp, RoundedCornerShape(24.dp)),
-                        colors = ButtonDefaults.buttonColors(containerColor = AccentOrange),
-                        shape = RoundedCornerShape(24.dp),
-                        elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
-                    ) {
-                        Text(
-                            text = "Konfirmasi",
-                            fontFamily = PoppinsSemi,
-                            fontSize = 14.sp,
-                            color = Color.White
-                        )
-                    }
+                    Text(
+                        text = "Konfirmasi",
+                        fontFamily = PoppinsSemi,
+                        fontSize = 14.sp,
+                        color = Color.White
+                    )
                 }
             }
         }
     }
 }
 
-/* ====== Subcomponents ====== */
+/* ===== Subcomponents ===== */
 
 @Composable
 private fun FieldLabel(text: String) {
@@ -266,7 +256,7 @@ private fun UnderlineTextField(
     }
 }
 
-/* ====== Preview ====== */
+/* ===== Preview ===== */
 @Preview(showBackground = true, showSystemUi = true, backgroundColor = 0xFFFFFFFF)
 @Composable
 private fun PreviewFormPengaduan() {
