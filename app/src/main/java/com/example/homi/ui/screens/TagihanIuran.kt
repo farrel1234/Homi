@@ -217,9 +217,12 @@ private fun TahunSection(
                     Text(
                         text = "Sudah Dibayar",
                         fontFamily = PoppinsSemi,
-                        fontSize = 12.sp,
+                        fontSize = 10.sp,
                         color = PaidGreen,
-                        modifier = Modifier.weight(0.9f)
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .weight(0.9f)
+                            .fillMaxWidth()
                     )
                 } else {
                     OutlinedButton(
@@ -227,10 +230,10 @@ private fun TahunSection(
                         border = BorderStroke(1.dp, AccentOrange),
                         colors = ButtonDefaults.outlinedButtonColors(contentColor = AccentOrange),
                         shape = RoundedCornerShape(6.dp),
-                        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp),
+                        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 6.dp),
                         modifier = Modifier
                             .height(28.dp)
-                            .widthIn(min = 72.dp)
+                            .widthIn(min = 91.dp)
                     ) {
                         Text(
                             "Bayar",

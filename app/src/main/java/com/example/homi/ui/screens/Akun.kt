@@ -17,7 +17,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -36,14 +35,9 @@ fun AkunScreen(
     onUbahKataSandi: (() -> Unit)? = null,
     onProsesPengajuan: (() -> Unit)? = null,
     onLaporkanMasalah: (() -> Unit)? = null,
-    onKeluar: (() -> Unit)? = null,
-    onBeranda: (() -> Unit)? = null,
-    onDirektori: (() -> Unit)? = null,
-    onRiwayat: (() -> Unit)? = null,
-    onAkun: (() -> Unit)? = null
+    onKeluar: (() -> Unit)? = null
 ) {
     Box(Modifier.fillMaxSize()) {
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -76,7 +70,7 @@ fun AkunScreen(
                     )
                     Spacer(Modifier.width(4.dp))
                     Image(
-                        painter = painterResource(R.drawable.panah),
+                        painter = painterResource(R.drawable.edit_pen),
                         contentDescription = "Edit Profil",
                         modifier = Modifier.size(14.dp)
                     )
@@ -107,15 +101,6 @@ fun AkunScreen(
                 }
             }
         }
-
-        /* ===== BOTTOM NAVBAR ===== */
-        BottomNavBar(
-            modifier = Modifier.align(Alignment.BottomCenter),
-            onBeranda = onBeranda,
-            onDirektori = onDirektori,
-            onRiwayat = onRiwayat,
-            onAkun = onAkun
-        )
     }
 }
 
@@ -140,65 +125,6 @@ private fun MenuRow(title: String, onClick: (() -> Unit)? = null) {
             painter = painterResource(R.drawable.panah),
             contentDescription = null,
             modifier = Modifier.size(16.dp)
-        )
-    }
-}
-
-@Composable
-private fun BottomNavBar(
-    modifier: Modifier = Modifier,
-    onBeranda: (() -> Unit)?,
-    onDirektori: (() -> Unit)?,
-    onRiwayat: (() -> Unit)?,
-    onAkun: (() -> Unit)?,
-) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(78.dp)
-    ) {
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(78.dp),
-            colors = CardDefaults.cardColors(containerColor = BlueMain),
-            shape = RoundedCornerShape(topStart = 22.dp, topEnd = 22.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
-        ) {}
-
-        Row(
-            modifier = Modifier
-                .align(Alignment.Center)
-                .fillMaxWidth()
-                .padding(horizontal = 28.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            NavItem(icon = R.drawable.homeoren, label = "Beranda", active = false, onClick = onBeranda)
-            NavItem(icon = R.drawable.icon_direktori, label = "Direktori", active = false, onClick = onDirektori)
-            NavItem(icon = R.drawable.icon_riwayat, label = "Riwayat", active = false, onClick = onRiwayat)
-            NavItem(icon = R.drawable.icon_akun, label = "Akun", active = true, onClick = onAkun)
-        }
-    }
-}
-
-@Composable
-private fun NavItem(icon: Int, label: String, active: Boolean, onClick: (() -> Unit)?) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.clickable(enabled = onClick != null) { onClick?.invoke() }
-    ) {
-        Image(
-            painter = painterResource(icon),
-            contentDescription = label,
-            modifier = Modifier.size(26.dp)
-        )
-        Spacer(Modifier.height(4.dp))
-        Text(
-            text = label,
-            fontFamily = PoppinsSemi,
-            fontSize = 10.sp,
-            color = if (active) AccentOrange else Color(0xFFECECEC)
         )
     }
 }
