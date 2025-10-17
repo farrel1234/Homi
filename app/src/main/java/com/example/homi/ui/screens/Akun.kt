@@ -23,13 +23,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.homi.R
 
-/* ===== COLORS ===== */
 private val BlueMain = Color(0xFF2F7FA3)
 private val AccentOrange = Color(0xFFFF9966)
 private val DividerLine = Color(0xFFE0E0E0)
 private val TextPrimary = Color(0xFF0E0E0E)
 
-/* ===== FONTS ===== */
 private val PoppinsSemi = FontFamily(Font(R.font.poppins_semibold))
 private val PoppinsReg = FontFamily(Font(R.font.poppins_regular))
 
@@ -54,7 +52,6 @@ fun AkunScreen(
         ) {
             Spacer(Modifier.height(30.dp))
 
-            /* ===== HEADER ===== */
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -86,7 +83,6 @@ fun AkunScreen(
                 }
             }
 
-            /* ===== CONTAINER PUTIH ===== */
             Spacer(Modifier.height(20.dp))
             Card(
                 modifier = Modifier.fillMaxSize(),
@@ -148,7 +144,6 @@ private fun MenuRow(title: String, onClick: (() -> Unit)? = null) {
     }
 }
 
-/* ===== NAVBAR ===== */
 @Composable
 private fun BottomNavBar(
     modifier: Modifier = Modifier,
@@ -208,7 +203,6 @@ private fun NavItem(icon: Int, label: String, active: Boolean, onClick: (() -> U
     }
 }
 
-/* ===== PREVIEW ===== */
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun PreviewAkun() {
