@@ -2,6 +2,7 @@ package com.example.homi.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,7 +16,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,254 +23,267 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.homi.R
 
+/* ===== Tokens ===== */
+private val BlueMain     = Color(0xFF2F7FA3)
+private val BlueButton   = Color(0xFF4F8EA9)
+private val AccentOrange = Color(0xFFE26A2C)
+private val Cream        = Color(0xFFFFF6EE)
+
+private val PoppinsSemi = FontFamily(Font(R.font.poppins_semibold))
+private val PoppinsReg  = FontFamily(Font(R.font.poppins_regular))
+private val SuezOne     = FontFamily(Font(R.font.suez_one_regular))
+
 @Composable
-fun DashboardScreen() {
-    val poppins = FontFamily(Font(R.font.poppins_semibold))
-    val poppinsRegular = FontFamily(Font(R.font.poppins_regular))
+fun DashboardScreen(
+    onBeranda: (() -> Unit)? = null,
+    onDirektori: (() -> Unit)? = null,
+    onRiwayat:   (() -> Unit)? = null,
+    onAkun:      (() -> Unit)? = null,
+    onPengajuan: (() -> Unit)? = null,
+    onPengaduan: (() -> Unit)? = null,
+    onPembayaran:(() -> Unit)? = null,
+) {
+    Box(Modifier.fillMaxSize()) {
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        // 🔹 Background
-        Image(
-            painter = painterResource(id = R.drawable.bg_dashboard),
-            contentDescription = "Background Dashboard",
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
-        )
-
+        /* Background biru utama */
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 20.dp, vertical = 24.dp)
+                .background(BlueMain)
+                .statusBarsPadding()
         ) {
-            // HEADER
+            /* ===== Header ===== */
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 14.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.icon_profile),
+                    painter = painterResource(R.drawable.icon_profile),
                     contentDescription = "Profil",
                     modifier = Modifier
-                        .size(60.dp)
+                        .size(56.dp)
                         .clip(CircleShape)
                 )
-                Spacer(modifier = Modifier.width(12.dp))
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = "Hai, Lily",
-                        fontFamily = poppins,
-                        fontSize = 22.sp,
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = "Selamat Datang di Homi",
-                        fontFamily = poppins,
-                        fontSize = 20.sp,
-                        color = Color.White,
-                        fontWeight = FontWeight.Medium
-                    )
-                    Text(
-                        text = "Menghubungkan Warga, Membangun Kebersamaan",
-                        fontFamily = poppinsRegular,
-                        fontSize = 12.sp,
-                        color = Color.White
-                    )
+                Spacer(Modifier.width(12.dp))
+                Column {
+                    Text("Hai, Lily",
+                        fontFamily = PoppinsSemi, fontSize = 20.sp, color = Color.White)
+                    Text("Selamat Datang di Homi",
+                        fontFamily = PoppinsSemi, fontSize = 18.sp, color = Color.White)
+                    Text("Menghubungkan Warga, Membangun Kebersamaan",
+                        fontFamily = PoppinsReg, fontSize = 12.sp, color = Color.White)
                 }
+                Spacer(Modifier.weight(1f))
+                // titik tiga, notifikasi, dll bisa ditambah di sini
             }
 
-            Spacer(modifier = Modifier.height(44.dp))
-
-            // 🔸 Pengumuman
-            Box(
-                modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "Pengumuman",
-                    fontFamily = poppins,
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFFE26A2C),
-                    textAlign = TextAlign.Center
-                )
-            }
-
-            Spacer(modifier = Modifier.height(13.dp))
-
-            // 🔸 Box Pengumuman
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(220.dp)
-                    .clip(RoundedCornerShape(16.dp))
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.img_pengumuman),
-                    contentDescription = "Kegiatan Gotong Royong",
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop
-                )
-
-                Box(
-                    modifier = Modifier
-                        .matchParentSize()
-                        .background(Color.Black.copy(alpha = 0.3f))
-                )
-
-                Column(
-                    modifier = Modifier
-                        .align(Alignment.BottomStart)
-                        .padding(start = 16.dp, end = 16.dp, bottom = 28.dp)
-                ) {
-                    val suezOne = FontFamily(Font(R.font.suez_one_regular))
-                    Text(
-                        text = "Kegiatan Gotong Royong",
-                        fontFamily = suezOne,
-                        fontWeight = FontWeight.Normal,
-                        color = Color.White,
-                        fontSize = 20.sp,
-                        textAlign = TextAlign.Center,
-                        textDecoration = TextDecoration.Underline,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-
-                    Spacer(modifier = Modifier.height(36.dp))
-
-                    Text(
-                        text = "Jumat/3 Sep 25,\nArea Masjid,\nSemua Warga\nPerumahan Hawai\nGarden",
-                        fontFamily = poppinsRegular,
-                        fontSize = 13.sp,
-                        color = Color.White,
-                        textAlign = TextAlign.Start
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(40.dp))
-
-            // 🔸 Menu Utama
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                // Box hijau cuma untuk pengajuan
-                DashboardMenuItem(icon = R.drawable.icon_pengajuan, text = "")
-
-                Spacer(modifier = Modifier.height(20.dp))
-
-                // Icon lainnya di luar box hijau
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    DashboardPlainIcon(icon = R.drawable.icon_pengaduan)
-                    DashboardPlainIcon(icon = R.drawable.icon_pembayaran)
-                    DashboardPlainIcon(icon = R.drawable.icon_keuangan)
-                }
-            }
-
-            Spacer(modifier = Modifier.height(20.dp))
-        }
-
-        // 🔹 Navbar dengan Card hijau di bawah layar
-        Box(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .height(70.dp)
-                .padding(horizontal = 0.dp, vertical = 0.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            // 🔸 Card hijau sebagai background navbar
+            /* ===== Container putih rounded ===== */
+            Spacer(Modifier.height(10.dp))
             Card(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(70.dp),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFF31708E)), // warna hijau tua
-                shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
-                elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
-            ) {}
-
-            // 🔸 Isi navbar (ikon dan label)
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp)
-                    .align(Alignment.Center),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                    .fillMaxSize(),
+                shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White)
             ) {
-                NavBarItem(R.drawable.homeoren, "Beranda", isActive = true)
-                NavBarItem(R.drawable.icon_direktori, "Direktori")
-                NavBarItem(R.drawable.icon_riwayat, "Riwayat")
-                NavBarItem(R.drawable.icon_akun, "Akun")
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 16.dp, vertical = 18.dp)
+                ) {
+
+                    /* Judul “Pengumuman” */
+                    Text(
+                        text = "Pengumuman",
+                        fontFamily = PoppinsSemi,
+                        fontSize = 16.sp,
+                        color = AccentOrange,
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center
+                    )
+
+                    Spacer(Modifier.height(10.dp))
+
+                    /* Kartu Pengumuman */
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(160.dp)
+                            .clip(RoundedCornerShape(16.dp))
+                    ) {
+                        Image(
+                            painter = painterResource(R.drawable.img_pengumuman),
+                            contentDescription = "Kegiatan Gotong Royong",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                        Box(
+                            modifier = Modifier
+                                .matchParentSize()
+                                .background(Color.Black.copy(alpha = 0.30f))
+                        )
+                        Text(
+                            text = "Kegiatan Gotong Royong",
+                            fontFamily = SuezOne,
+                            color = Color.White,
+                            fontSize = 18.sp,
+                            textAlign = TextAlign.Center,
+                            textDecoration = TextDecoration.Underline,
+                            modifier = Modifier
+                                .align(Alignment.TopCenter)
+                                .padding(top = 10.dp)
+                                .fillMaxWidth()
+                        )
+                        Text(
+                            text = "Jumat/3 Sep 25\nArea Masjid\nSemua Warga\nPerumahan Hawai Garden",
+                            fontFamily = PoppinsReg,
+                            fontSize = 12.sp,
+                            color = Color.White,
+                            modifier = Modifier
+                                .align(Alignment.BottomStart)
+                                .padding(12.dp)
+                        )
+                    }
+
+                    Spacer(Modifier.height(18.dp))
+
+                    /* ===== 3 Tombol Menu ===== */
+                    MenuButton(
+                        icon = R.drawable.icon_pengajuan,
+                        title = "Pengajuan Layanan",
+                        onClick = onPengajuan
+                    )
+                    Spacer(Modifier.height(14.dp))
+                    MenuButton(
+                        icon = R.drawable.icon_pengaduan,
+                        title = "Pengaduan Warga",
+                        onClick = onPengaduan
+                    )
+                    Spacer(Modifier.height(14.dp))
+                    MenuButton(
+                        icon = R.drawable.icon_pembayaran,
+                        title = "Pembayaran Iuran",
+                        onClick = onPembayaran
+                    )
+
+                    Spacer(Modifier.height(90.dp)) // ruang untuk nav bar
+                }
             }
         }
 
+        /* ===== Bottom Navigation ===== */
+        BottomNav(
+            modifier = Modifier.align(Alignment.BottomCenter),
+            onBeranda = onBeranda,
+            onDirektori = onDirektori,
+            onRiwayat = onRiwayat,
+            onAkun = onAkun
+        )
     }
 }
 
+/* ===== Components ===== */
+
 @Composable
-fun DashboardMenuItem(icon: Int, text: String) {
-    val poppins = FontFamily(Font(R.font.poppins_semibold))
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
+private fun MenuButton(
+    icon: Int,
+    title: String,
+    onClick: (() -> Unit)? = null
+) {
+    val shape = RoundedCornerShape(16.dp)
+    Row(
         modifier = Modifier
-            .width(130.dp)
-            .height(100.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .background(Color(0xFF31708E))
-            .padding(12.dp)
+            .fillMaxWidth()
+            .height(66.dp)
+            .clip(shape)
+            .background(BlueButton)
+            .clickable(enabled = onClick != null) { onClick?.invoke() }
+            .padding(horizontal = 14.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
-            painter = painterResource(id = icon),
-            contentDescription = text,
-            modifier = Modifier.size(36.dp)
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = text,
-            fontFamily = poppins,
-            fontSize = 12.sp,
-            color = Color(0xFFFFD3A4),
-            textAlign = TextAlign.Center
-        )
-    }
-}
-
-@Composable
-fun DashboardPlainIcon(icon: Int) {
-    Image(
-        painter = painterResource(id = icon),
-        contentDescription = null,
-        modifier = Modifier.size(50.dp)
-    )
-}
-
-@Composable
-fun NavBarItem(icon: Int, label: String, isActive: Boolean = false) {
-    val poppins = FontFamily(Font(R.font.poppins_semibold))
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Image(
-            painter = painterResource(id = icon),
-            contentDescription = label,
+            painter = painterResource(icon),
+            contentDescription = title,
             modifier = Modifier.size(28.dp)
         )
+        Spacer(Modifier.width(14.dp))
         Text(
-            text = label,
-            fontFamily = poppins,
-            fontSize = 10.sp,
-            color = if (isActive) Color(0xFFE26A2C) else Color.Gray
+            text = title,
+            fontFamily = PoppinsSemi,
+            color = Color.White,
+            fontSize = 14.sp
         )
     }
 }
 
-@Preview(showSystemUi = true)
 @Composable
-fun PreviewDashboard() {
-    MaterialTheme {
-        DashboardScreen()
+private fun BottomNav(
+    modifier: Modifier = Modifier,
+    onBeranda: (() -> Unit)?,
+    onDirektori: (() -> Unit)?,
+    onRiwayat: (() -> Unit)?,
+    onAkun: (() -> Unit)?,
+) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(78.dp)
+    ) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(78.dp),
+            colors = CardDefaults.cardColors(containerColor = BlueMain),
+            shape = RoundedCornerShape(topStart = 22.dp, topEnd = 22.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+        ) {}
+
+        Row(
+            modifier = Modifier
+                .align(Alignment.Center)
+                .fillMaxWidth()
+                .padding(horizontal = 28.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            NavItem(icon = R.drawable.homeoren, label = "Beranda", active = true,  onClick = onBeranda)
+            NavItem(icon = R.drawable.icon_direktori, label = "Direktori", active = false, onClick = onDirektori)
+            NavItem(icon = R.drawable.icon_riwayat,   label = "Riwayat",   active = false, onClick = onRiwayat)
+            NavItem(icon = R.drawable.icon_akun,      label = "Akun",      active = false, onClick = onAkun)
+        }
     }
+}
+
+@Composable
+private fun NavItem(
+    icon: Int,
+    label: String,
+    active: Boolean,
+    onClick: (() -> Unit)?
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.clickable(enabled = onClick != null) { onClick?.invoke() }
+    ) {
+        Image(
+            painter = painterResource(icon),
+            contentDescription = label,
+            modifier = Modifier.size(26.dp)
+        )
+        Spacer(Modifier.height(4.dp))
+        Text(
+            text = label,
+            fontFamily = PoppinsSemi,
+            fontSize = 10.sp,
+            color = if (active) AccentOrange else Color(0xFFECECEC)
+        )
+    }
+}
+
+/* ===== Preview ===== */
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+private fun PreviewDashboardBaru() {
+    MaterialTheme { DashboardScreen() }
 }
