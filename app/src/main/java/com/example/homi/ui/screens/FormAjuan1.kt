@@ -179,7 +179,7 @@ fun LineTextField(
             focusedIndicatorColor = Color(0xFFBBBBBB),
             unfocusedIndicatorColor = Color(0xFFBBBBBB),
             cursorColor = Color.Black
-        )
+        )   
     )
 }
 
