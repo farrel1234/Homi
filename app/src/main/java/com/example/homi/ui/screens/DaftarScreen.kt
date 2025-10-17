@@ -171,21 +171,19 @@ fun DaftarScreen(
 
             // Button Konfirmasi
             Button(
-                onClick = onRegisterClicked,
+                onClick = {},
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFA06B)),
+                shape = RoundedCornerShape(10.dp),
                 modifier = Modifier
-                    .width(285.dp)
-                    .height(48.dp),
-                shape = RoundedCornerShape(20.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFF8A477)
-                )
+                    .fillMaxWidth()
+                    .height(48.dp)
             ) {
                 Text(
                     text = "Konfirmasi",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
+                    color = Color.White,
                     fontFamily = poppins,
-                    color = Color.White
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 15.sp
                 )
             }
 

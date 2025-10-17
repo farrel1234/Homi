@@ -15,6 +15,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,6 +38,8 @@ private val PoppinsReg  = FontFamily(Font(R.font.poppins_regular))
 fun LaporkanMasalahScreen(
     onKirim: (email: String, perihal: String, detail: String) -> Unit = { _,_,_ -> }
 ) {
+    val poppins = FontFamily(Font(R.font.poppins_regular))
+
     var email by remember { mutableStateOf("") }
     var perihal by remember { mutableStateOf("") }
     var detail by remember { mutableStateOf("") }
@@ -139,19 +142,19 @@ fun LaporkanMasalahScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Button(
-                            onClick = { onKirim(email.trim(), perihal.trim(), detail.trim()) },
-                            shape = RoundedCornerShape(12.dp),
-                            colors = ButtonDefaults.buttonColors(containerColor = AccentOrange),
-                            elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp),
+                            onClick = {},
+                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFA06B)),
+                            shape = RoundedCornerShape(10.dp),
                             modifier = Modifier
-                                .fillMaxWidth(0.88f) // ~88% width biar tampak ada margin kiri/kanan
-                                .height(44.dp)
+                                .fillMaxWidth()
+                                .height(48.dp)
                         ) {
                             Text(
-                                "Kirim",
+                                text = "Konfirmasi",
                                 color = Color.White,
-                                fontFamily = PoppinsSemi,
-                                fontSize = 14.sp
+                                fontFamily = poppins,
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 15.sp
                             )
                         }
                     }

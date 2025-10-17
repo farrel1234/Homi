@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.homi.R
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.ui.text.font.FontWeight
 
 /* ===== Theme tokens ===== */
 private val BlueMain     = Color(0xFF2F7FA3)
@@ -43,11 +44,13 @@ private val PoppinsReg  = FontFamily(Font(R.font.poppins_regular))
 
 @Composable
 fun FormPengaduanScreen(
+
     onBack: (() -> Unit)? = null,
     onKonfirmasi: ((nama: String, tanggal: String, tempat: String, perihal: String) -> Unit)? = null,
     @DrawableRes backIcon: Int = R.drawable.panahkembali,
     @DrawableRes icUpload: Int = R.drawable.kamera
 ) {
+    val poppins = FontFamily(Font(R.font.poppins_regular))
     // state input
     var nama by remember { mutableStateOf("") }
     var tanggal by remember { mutableStateOf("") }
@@ -193,20 +196,19 @@ fun FormPengaduanScreen(
 
                 // Tombol Konfirmasi
                 Button(
-                    onClick = { onKonfirmasi?.invoke(nama, tanggal, tempat, perihal) },
+                    onClick = {},
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFA06B)),
+                    shape = RoundedCornerShape(10.dp),
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(48.dp)
-                        .shadow(8.dp, RoundedCornerShape(24.dp)),
-                    colors = ButtonDefaults.buttonColors(containerColor = AccentOrange),
-                    shape = RoundedCornerShape(24.dp),
-                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
                 ) {
                     Text(
                         text = "Konfirmasi",
-                        fontFamily = PoppinsSemi,
-                        fontSize = 14.sp,
-                        color = Color.White
+                        color = Color.White,
+                        fontFamily = poppins,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 15.sp
                     )
                 }
             }

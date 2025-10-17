@@ -233,7 +233,7 @@ fun ProsesPengajuan2Screen(
                         fontFamily = PoppinsReg,
                         fontSize = 10.sp,
                         color = AccentOrange,
-                        textAlign = TextAlign.Center,
+                        textAlign = TextAlign.Left,
                         lineHeight = 14.sp,
                         modifier = Modifier.padding(horizontal = 8.dp)
                     )
