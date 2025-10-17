@@ -1,14 +1,18 @@
 package com.example.homi.ui.screens
 
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -17,20 +21,20 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.homi.R
 
-/* ===== TOKENS (konsisten dgn screen lain) ===== */
-private val BlueMain      = Color(0xFF2F7FA3)
-private val BlueBorder    = Color(0xFF2F7FA3)
-private val BlueText      = Color(0xFF2F7FA3)
-private val ChipBg        = Color(0xFFE6F3F8)
-private val TextDark      = Color(0xFF0E0E0E)
-private val LineGray      = Color(0xFFE6E6E6)
+/* ===== TOKENS ===== */
+private val BlueMain    = Color(0xFF2F7FA3)
+private val BlueBorder  = Color(0xFF2F7FA3)
+private val BlueText    = Color(0xFF2F7FA3)
+private val ChipBg      = Color(0xFFE6F3F8)
+private val TextDark    = Color(0xFF0E0E0E)
+private val LineGray    = Color(0xFFE6E6E6)
+private val HintGray    = Color(0xFF9AA4AF)
 
 private val PoppinsSemi = FontFamily(Font(R.font.poppins_semibold))
 private val PoppinsReg  = FontFamily(Font(R.font.poppins_regular))
@@ -38,12 +42,14 @@ private val PoppinsReg  = FontFamily(Font(R.font.poppins_regular))
 @Composable
 fun PembayaranIuranScreen(
     amount: String = "Rp25.000",
+    bulan: String = "Agustus 2025",
+    transaksiId: String = "IPL-123456789",
     @DrawableRes backIcon: Int = R.drawable.panah,
-    @DrawableRes qrIcon: Int = R.drawable.qr_code,  // sediakan bitmap/vec qr atau placeholder
+    @DrawableRes qrIcon: Int = R.drawable.qr_code,
     onBack: (() -> Unit)? = null,
-    onRincianClick: (() -> Unit)? = null,
-    onRefreshStatus: (() -> Unit)? = null
 ) {
+    var rincianExpanded by remember { mutableStateOf(true) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -74,7 +80,7 @@ fun PembayaranIuranScreen(
         }
 
         Text(
-            text = "Silahkan membayar tagihan anda",
+            text = "Segera membayar tagihan iuran yang tersedia",
             fontFamily = PoppinsReg,
             fontSize = 12.sp,
             color = Color.White,
@@ -88,8 +94,7 @@ fun PembayaranIuranScreen(
         /* ===== WHITE CONTAINER ===== */
         Spacer(Modifier.height(12.dp))
         Card(
-            modifier = Modifier
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
             colors = CardDefaults.cardColors(containerColor = Color.White)
         ) {
@@ -100,7 +105,7 @@ fun PembayaranIuranScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                /* ===== ROW CHIP NOMINAL & RINCIAN ===== */
+                /* ===== ROW: NOMINAL CHIP + RINCIAN TOGGLE ===== */
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -108,7 +113,7 @@ fun PembayaranIuranScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // Chip amount
+                    // Nominal
                     Row(
                         modifier = Modifier
                             .clip(RoundedCornerShape(18.dp))
@@ -124,13 +129,13 @@ fun PembayaranIuranScreen(
                         )
                     }
 
-                    // Rincian (dropdown)
+                    // Toggle Rincian
                     TextButton(
-                        onClick = { onRincianClick?.invoke() },
+                        onClick = { rincianExpanded = !rincianExpanded },
                         contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp)
                     ) {
                         Text(
-                            text = "Rincian ▾",
+                            text = if (rincianExpanded) "Rincian ▴" else "Rincian ▾",
                             fontFamily = PoppinsReg,
                             fontSize = 12.sp,
                             color = TextDark
@@ -140,13 +145,50 @@ fun PembayaranIuranScreen(
 
                 Divider(color = LineGray, thickness = 1.dp)
 
+                /* ===== RINCIAN (expand/collapse) ===== */
+                AnimatedVisibility(
+                    visible = rincianExpanded,
+                    enter = fadeIn() + expandVertically(),
+                    exit = shrinkVertically() + fadeOut()
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp, bottom = 6.dp)
+                    ) {
+                        // garis dengan judul di tengah (seperti tab "Rincian Pembayaran")
+                        Box(Modifier.fillMaxWidth()) {
+                            Divider(color = LineGray, thickness = 1.dp, modifier = Modifier.align(Alignment.Center))
+                            Text(
+                                text = "Rincian Pembayaran",
+                                fontFamily = PoppinsSemi,
+                                fontSize = 12.sp,
+                                color = HintGray,
+                                modifier = Modifier
+                                    .align(Alignment.Center)
+                                    .background(Color.White)
+                                    .padding(horizontal = 10.dp)
+                            )
+                        }
+
+                        Spacer(Modifier.height(8.dp))
+
+                        RincianRow("Total Pembayaran", amount, highlightRight = true)
+                        Divider(color = LineGray, thickness = 1.dp)
+                        RincianRow("Bulan", bulan)
+                        Divider(color = LineGray, thickness = 1.dp)
+                        RincianRow("Transaksi ID", transaksiId)
+                        Divider(color = LineGray, thickness = 1.dp)
+                    }
+                }
+
                 Spacer(Modifier.height(10.dp))
 
                 /* ===== QR AREA ===== */
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     // ikon kecil di atas tulisan QRIS (opsional)
                     Image(
-                        painter = painterResource(id = R.drawable.ic_qr), // jika tak ada, ganti ke qrIcon atau hapus
+                        painter = painterResource(id = R.drawable.ic_qr),
                         contentDescription = null,
                         modifier = Modifier
                             .size(16.dp)
@@ -162,7 +204,6 @@ fun PembayaranIuranScreen(
                     )
                     Spacer(Modifier.height(8.dp))
 
-                    // QR besar
                     Image(
                         painter = painterResource(qrIcon),
                         contentDescription = "QR Pembayaran",
@@ -173,28 +214,43 @@ fun PembayaranIuranScreen(
                     )
                 }
 
-                Spacer(Modifier.height(18.dp))
-
-                /* ===== REFRESH STATUS ===== */
-                OutlinedButton(
-                    onClick = { onRefreshStatus?.invoke() },
-                    shape = RoundedCornerShape(12.dp),
-                    border = BorderStroke(1.dp, BlueBorder),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(44.dp)
-                ) {
-                    Text(
-                        text = "Refresh Status Pembayaran",
-                        fontFamily = PoppinsSemi,
-                        fontSize = 14.sp,
-                        color = BlueText
-                    )
-                }
-
                 Spacer(Modifier.height(16.dp))
+                // (Sesuai permintaan) Tombol refresh DIHAPUS
             }
         }
+    }
+}
+
+/* ====== Subcomponents ====== */
+
+@Composable
+private fun RincianRow(
+    left: String,
+    right: String,
+    highlightRight: Boolean = false
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 6.dp, vertical = 10.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = left,
+            fontFamily = PoppinsReg,
+            fontSize = 12.sp,
+            color = TextDark,
+            modifier = Modifier.weight(1f)
+        )
+        Text(
+            text = right,
+            fontFamily = if (highlightRight) PoppinsSemi else PoppinsReg,
+            fontSize = 12.sp,
+            color = if (highlightRight) BlueText else Color(0xFF475569),
+            textAlign = TextAlign.End,
+            modifier = Modifier.weight(1f)
+        )
     }
 }
 
@@ -203,7 +259,6 @@ fun PembayaranIuranScreen(
 @Composable
 private fun PreviewPembayaran() {
     MaterialTheme {
-        // ganti qrIcon dgn drawable qr kamu (mis. R.drawable.qris_png)
         PembayaranIuranScreen(qrIcon = R.drawable.qr_code)
     }
 }
