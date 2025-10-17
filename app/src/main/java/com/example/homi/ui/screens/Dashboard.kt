@@ -97,7 +97,7 @@ fun DashboardScreen(
                     Text(
                         text = "Pengumuman",
                         fontFamily = PoppinsSemi,
-                        fontSize = 16.sp,
+                        fontSize = 20.sp,
                         color = AccentOrange,
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Center
@@ -109,7 +109,7 @@ fun DashboardScreen(
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(160.dp)
+                            .height(220.dp)
                             .clip(RoundedCornerShape(16.dp))
                     ) {
                         Image(
@@ -151,8 +151,9 @@ fun DashboardScreen(
                     /* ===== 3 Tombol Menu ===== */
                     MenuButton(
                         icon = R.drawable.icon_pengajuan,
-                        title = "Pengajuan Layanan",
-                        onClick = onPengajuan
+                        title = "    Pengajuan Layanan",
+                        onClick = onPengajuan,
+
                     )
                     Spacer(Modifier.height(14.dp))
                     MenuButton(
@@ -165,6 +166,7 @@ fun DashboardScreen(
                         icon = R.drawable.icon_pembayaran,
                         title = "Pembayaran Iuran",
                         onClick = onPembayaran
+
                     )
 
                     Spacer(Modifier.height(90.dp)) // ruang untuk nav bar
@@ -205,7 +207,6 @@ private fun MenuButton(
         Image(
             painter = painterResource(icon),
             contentDescription = title,
-            modifier = Modifier.size(28.dp)
         )
         Spacer(Modifier.width(14.dp))
         Text(
