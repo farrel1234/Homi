@@ -1,15 +1,20 @@
 package com.example.homi.ui.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -21,6 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import com.example.homi.R
 
 /* ===== Tokens ===== */
@@ -43,6 +49,7 @@ fun LaporkanMasalahScreen(
     var email by remember { mutableStateOf("") }
     var perihal by remember { mutableStateOf("") }
     var detail by remember { mutableStateOf("") }
+    var showPopup by rememberSaveable { mutableStateOf(false) }
 
     Box(Modifier.fillMaxSize()) {
         // BG dengan header biru melengkung
@@ -90,8 +97,7 @@ fun LaporkanMasalahScreen(
                 shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
                 tonalElevation = 0.dp,
                 shadowElevation = 0.dp,
-                modifier = Modifier
-                    .fillMaxSize()
+                modifier = Modifier.fillMaxSize()
             ) {
                 Column(
                     modifier = Modifier
@@ -136,13 +142,16 @@ fun LaporkanMasalahScreen(
 
                     Spacer(Modifier.height(26.dp))
 
-                    // Tombol di tengah, lebar tidak penuh (sesuai screenshot)
+                    // Tombol di tengah
                     Box(
                         modifier = Modifier.fillMaxWidth(),
                         contentAlignment = Alignment.Center
                     ) {
                         Button(
-                            onClick = {},
+                            onClick = {
+                                onKirim(email.trim(), perihal.trim(), detail.trim())
+                                showPopup = true
+                            },
                             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFA06B)),
                             shape = RoundedCornerShape(10.dp),
                             modifier = Modifier
@@ -160,6 +169,104 @@ fun LaporkanMasalahScreen(
                     }
 
                     Spacer(Modifier.height(20.dp))
+                }
+            }
+        }
+
+        /* ===== POPUP SUKSES ===== */
+        if (showPopup) {
+            // Dim seluruh layar
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color(0x88000000))
+                    .zIndex(1f),
+                contentAlignment = Alignment.Center
+            ) {
+                // Card popup
+                Card(
+                    shape = RoundedCornerShape(24.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    border = CardDefaults.outlinedCardBorder().copy(
+                        width = 2.dp,
+                        brush = androidx.compose.ui.graphics.SolidColor(FieldBorder)
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth(0.86f)
+                        .wrapContentHeight()
+                        .shadow(10.dp, RoundedCornerShape(24.dp), clip = false)
+                        .zIndex(2f)
+                ) {
+                    Box(Modifier.fillMaxWidth()) {
+                        Column(
+                            modifier = Modifier
+                                .padding(horizontal = 20.dp, vertical = 22.dp)
+                                .fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            // Gambar tengah (bahagia)
+                            Image(
+                                painter = painterResource(R.drawable.bahagia),
+                                contentDescription = "Sukses",
+                                modifier = Modifier
+                                    .size(180.dp)
+                                    .clip(CircleShape) // opsional: kalau gambarnya square
+                                    .then(Modifier)
+                            )
+
+                            Spacer(Modifier.height(12.dp))
+
+                            Text(
+                                text = "Laporan Anda Berhasil\nDi Kirim !",
+                                fontFamily = PoppinsSemi,
+                                fontSize = 16.sp,
+                                color = Color(0xFF111827),
+                                textAlign = TextAlign.Center
+                            )
+
+                            Spacer(Modifier.height(8.dp))
+
+                            Text(
+                                text = "Mohon Tunggu Proses Laporan",
+                                fontFamily = PoppinsReg,
+                                fontSize = 12.sp,
+                                color = AccentOrange,
+                                textAlign = TextAlign.Center
+                            )
+
+                            Spacer(Modifier.height(16.dp))
+
+                            // Tombol tutup
+                            Button(
+                                onClick = { showPopup = false },
+                                colors = ButtonDefaults.buttonColors(containerColor = AccentOrange),
+                                shape = RoundedCornerShape(10.dp),
+                                modifier = Modifier
+                                    .fillMaxWidth(0.6f)
+                                    .height(42.dp)
+                            ) {
+                                Text("Tutup", fontFamily = PoppinsSemi, color = Color.White)
+                            }
+                        }
+
+                        // (Opsional) Badge lonceng di atas card:
+                        // kalau punya drawable, buka komentar di bawah dan ganti R.drawable.notif_bell
+//                        Box(
+//                            modifier = Modifier
+//                                .align(Alignment.TopCenter)
+//                                .offset(y = (-28).dp)
+//                                .size(56.dp)
+//                                .clip(CircleShape)
+//                                .background(BlueMain),
+//                            contentAlignment = Alignment.Center
+//                        ) {
+//                            Image(
+//                                painter = painterResource(R.drawable.notif_bell),
+//                                contentDescription = "Notifikasi",
+//                                modifier = Modifier.size(36.dp)
+//                            )
+//                        }
+                    }
                 }
             }
         }
