@@ -19,36 +19,31 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.homi.R
 
-/* ===== Theme tokens ===== */
-private val BlueMain     = Color(0xFF2F7FA3)
-private val BlueBorder   = Color(0xFF2F7FA3)
-private val BlueText     = Color(0xFF2F7FA3)
+/* ===== THEME COLORS ===== */
+private val BlueMain = Color(0xFF2F7FA3)
+private val BlueBorder = Color(0xFF2F7FA3)
+private val BlueText = Color(0xFF2F7FA3)
 private val AccentOrange = Color(0xFFFF9966)
-private val TextPrimary  = Color(0xFF0E0E0E)
-private val LineDark     = Color(0xFF1F1F1F) // garis bawah hitam tipis seperti desain
+private val TextPrimary = Color(0xFF0E0E0E)
+private val DividerGray = Color(0xFF2F7FA3)
 
 private val PoppinsSemi = FontFamily(Font(R.font.poppins_semibold))
-private val PoppinsReg  = FontFamily(Font(R.font.poppins_regular))
+private val PoppinsReg = FontFamily(Font(R.font.poppins_regular))
 
 @Composable
 fun DetailRiwayatPengaduanScreen(
-    // Data
     namaPelapor: String = "Lily",
     tanggal: String = "1 Oktober 2025",
     tempat: String = "di depan lapangan voli",
-    perihal: String =
-        "Sampah Berserakan di Jalan, lingkungan menjadi kotor, bau dan banyak lalat.",
-    // Resources
-    @DrawableRes headerImage: Int = R.drawable.sampah, // ganti fotomu
-    @DrawableRes backIcon: Int = R.drawable.panahkembali,             // ganti panahmu
-    // Action
+    perihal: String = "Sampah Berserakan di Jalan, lingkungan menjadi kotor, bau dan banyak lalat.",
+    @DrawableRes headerImage: Int = R.drawable.sampah, // background foto
+    @DrawableRes backIcon: Int = R.drawable.panahkembali, // ikon panah
     onBack: (() -> Unit)? = null
 ) {
     Column(
@@ -57,7 +52,7 @@ fun DetailRiwayatPengaduanScreen(
             .background(Color.White)
             .statusBarsPadding()
     ) {
-        /* ===== HEADER IMAGE (rounded bottom) ===== */
+        /* ===== Header Gambar ===== */
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -66,9 +61,9 @@ fun DetailRiwayatPengaduanScreen(
         ) {
             Image(
                 painter = painterResource(headerImage),
-                contentDescription = null,
+                contentDescription = "Foto Pengaduan",
                 modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
+
             )
             IconButton(
                 onClick = { onBack?.invoke() },
@@ -77,18 +72,17 @@ fun DetailRiwayatPengaduanScreen(
                     .padding(8.dp)
                     .size(36.dp)
                     .clip(CircleShape)
-
             ) {
-                Icon(painterResource(backIcon), contentDescription = "Kembali")
+                Icon(painter = painterResource(backIcon), contentDescription = "Kembali")
             }
         }
 
-        /* ===== WHITE CONTAINER (rounded big top) ===== */
+        /* ===== Konten Putih ===== */
         Spacer(Modifier.height(8.dp))
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f), // biar memanjang ke bawah seperti mockup
+                .weight(1f),
             shape = RoundedCornerShape(topStart = 36.dp, topEnd = 36.dp),
             colors = CardDefaults.cardColors(containerColor = Color.White)
         ) {
@@ -96,14 +90,14 @@ fun DetailRiwayatPengaduanScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
-                    .padding(top = 16.dp, bottom = 24.dp),
+                    .padding(vertical = 20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Judul oranye
+                // Judul
                 Text(
                     text = "Riwayat Pengaduan",
                     fontFamily = PoppinsSemi,
-                    fontSize = 22.sp,
+                    fontSize = 20.sp,
                     color = AccentOrange,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth()
@@ -111,7 +105,7 @@ fun DetailRiwayatPengaduanScreen(
 
                 Spacer(Modifier.height(12.dp))
 
-                // Kartu detail (border biru, rounded)
+                // Kartu detail
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -125,21 +119,16 @@ fun DetailRiwayatPengaduanScreen(
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp, vertical = 14.dp)
                     ) {
+                        DetailField("Nama Pelapor", namaPelapor)
+                        DividerLine()
 
-                        FieldTitle("Nama Pelapor")
-                        FieldValue(namaPelapor)
-                        FieldUnderline()
+                        DetailField("Tanggal", tanggal)
+                        DividerLine()
 
-                        FieldTitle("Tanggal")
-                        FieldValue(tanggal)
-                        FieldUnderline()
+                        DetailField("Tempat", tempat)
+                        DividerLine()
 
-                        FieldTitle("Tempat")
-                        FieldValue(tempat)
-                        FieldUnderline()
-
-                        FieldTitle("Perihal")
-                        FieldValue(perihal, multiline = true)
+                        DetailField("Perihal", perihal, true)
                     }
                 }
             }
@@ -147,34 +136,30 @@ fun DetailRiwayatPengaduanScreen(
     }
 }
 
-/* ===== Sub components ===== */
+/* ===== Reusable Subcomponents ===== */
 @Composable
-private fun FieldTitle(text: String) {
+private fun DetailField(title: String, value: String, multiLine: Boolean = false) {
     Text(
-        text = text,
+        text = title,
         fontFamily = PoppinsSemi,
         fontSize = 14.sp,
         color = BlueText
     )
-    Spacer(Modifier.height(6.dp))
-}
-
-@Composable
-private fun FieldValue(text: String, multiline: Boolean = false) {
+    Spacer(Modifier.height(4.dp))
     Text(
-        text = text,
+        text = value,
         fontFamily = PoppinsReg,
         fontSize = 14.sp,
         color = TextPrimary,
-        lineHeight = if (multiline) 20.sp else 18.sp
+        lineHeight = if (multiLine) 20.sp else 18.sp
     )
 }
 
 @Composable
-private fun FieldUnderline() {
+private fun DividerLine() {
     Spacer(Modifier.height(6.dp))
     Divider(
-        color = LineDark,
+        color = DividerGray,
         thickness = 1.dp,
         modifier = Modifier.fillMaxWidth()
     )
