@@ -108,7 +108,7 @@ fun TagihanIuranScreen(
         Text(
             text = "Segera membayar tagihan iuran yang tersedia",
             fontFamily = PoppinsReg,
-            fontSize = 12.sp,
+            fontSize = 14.sp,
             color = Color.White,
             textAlign = TextAlign.Center,
             lineHeight = 18.sp,
@@ -121,7 +121,7 @@ fun TagihanIuranScreen(
         Spacer(Modifier.height(12.dp))
         Card(
             modifier = Modifier.fillMaxSize(),
-            shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
+            shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
             border = BorderStroke(2.dp, BlueBorder),
             colors = CardDefaults.cardColors(containerColor = Color.White)
         ) {

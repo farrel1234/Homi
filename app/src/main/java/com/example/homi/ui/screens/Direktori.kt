@@ -60,7 +60,7 @@ fun DirektoriScreen(
             Text(
                 text = "Direktori",
                 fontFamily = PoppinsSemi,
-                fontSize = 24.sp,
+                fontSize = 22.sp,
                 color = Color.White,
                 modifier = Modifier.weight(1f),
                 textAlign = TextAlign.Center
@@ -82,10 +82,10 @@ fun DirektoriScreen(
         )
 
         /* ===== White container ===== */
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(24.dp))
         Card(
             modifier = Modifier.fillMaxSize(),
-            shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
+            shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
             colors = CardDefaults.cardColors(containerColor = Color.White)
         ) {
             Column(

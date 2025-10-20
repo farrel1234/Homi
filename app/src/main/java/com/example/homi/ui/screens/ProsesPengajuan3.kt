@@ -83,6 +83,8 @@ fun ProsesPengajuan3(
                     .clickable(enabled = onBack != null) { onBack?.invoke() }
             )
             Spacer(Modifier.width(8.dp))
+            Spacer(Modifier.height(16.dp))
+
             Text(
                 text = "Pengajuan Layanan",
                 fontFamily = PoppinsSemi,
@@ -134,7 +136,7 @@ fun ProsesPengajuan3(
         Card(
             modifier = Modifier
                 .fillMaxSize(),
-            shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
+            shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
             colors = CardDefaults.cardColors(containerColor = Color.White)
         ) {
             Column(

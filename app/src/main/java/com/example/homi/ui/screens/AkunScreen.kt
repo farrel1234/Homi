@@ -109,7 +109,7 @@ fun AkunScreen(
             // Kartu menu
             Card(
                 modifier = Modifier.fillMaxSize(),
-                shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
+                shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White)
             ) {
                 Column(

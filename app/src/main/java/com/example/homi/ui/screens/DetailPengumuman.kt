@@ -50,7 +50,7 @@ fun DetailPengumumanScreen() {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 20.dp, vertical = 24.dp),
+                    .padding(horizontal = 15.dp, vertical = 12.dp),
                 horizontalAlignment = Alignment.Start
             ) {
                 Text(

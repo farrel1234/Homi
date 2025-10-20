@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.homi.R
@@ -35,10 +36,6 @@ private val SuezOne     = FontFamily(Font(R.font.suez_one_regular))
 
 @Composable
 fun DashboardScreen(
-    onBeranda: (() -> Unit)? = null,
-    onDirektori: (() -> Unit)? = null,
-    onRiwayat:   (() -> Unit)? = null,
-    onAkun:      (() -> Unit)? = null,
     onPengajuan: (() -> Unit)? = null,
     onPengaduan: (() -> Unit)? = null,
     onPembayaran:(() -> Unit)? = null,
@@ -63,7 +60,7 @@ fun DashboardScreen(
                     painter = painterResource(R.drawable.icon_profile),
                     contentDescription = "Profil",
                     modifier = Modifier
-                        .size(56.dp)
+                        .size(80.dp)
                         .clip(CircleShape)
                 )
                 Spacer(Modifier.width(12.dp))
@@ -71,7 +68,7 @@ fun DashboardScreen(
                     Text("Hai, Lily",
                         fontFamily = PoppinsSemi, fontSize = 20.sp, color = Color.White)
                     Text("Selamat Datang di Homi",
-                        fontFamily = PoppinsSemi, fontSize = 18.sp, color = Color.White)
+                        fontFamily = PoppinsSemi, fontSize = 20.sp, color = Color.White)
                     Text("Menghubungkan Warga, Membangun Kebersamaan",
                         fontFamily = PoppinsReg, fontSize = 12.sp, color = Color.White)
                 }
@@ -84,7 +81,7 @@ fun DashboardScreen(
             Card(
                 modifier = Modifier
                     .fillMaxSize(),
-                shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
+                shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White)
             ) {
                 Column(
@@ -153,19 +150,22 @@ fun DashboardScreen(
                         icon = R.drawable.icon_pengajuan,
                         title = "    Pengajuan Layanan",
                         onClick = onPengajuan,
+                        iconSize = 45.dp
 
                     )
                     Spacer(Modifier.height(14.dp))
                     MenuButton(
                         icon = R.drawable.icon_pengaduan,
                         title = "Pengaduan Warga",
-                        onClick = onPengaduan
+                        onClick = onPengaduan,
+                        iconSize = 72.dp
                     )
                     Spacer(Modifier.height(14.dp))
                     MenuButton(
                         icon = R.drawable.icon_pembayaran,
                         title = "Pembayaran Iuran",
-                        onClick = onPembayaran
+                        onClick = onPembayaran,
+                        iconSize = 72.dp
 
                     )
 
@@ -173,15 +173,6 @@ fun DashboardScreen(
                 }
             }
         }
-
-        /* ===== Bottom Navigation ===== */
-        BottomNav(
-            modifier = Modifier.align(Alignment.BottomCenter),
-            onBeranda = onBeranda,
-            onDirektori = onDirektori,
-            onRiwayat = onRiwayat,
-            onAkun = onAkun
-        )
     }
 }
 
@@ -191,13 +182,14 @@ fun DashboardScreen(
 private fun MenuButton(
     icon: Int,
     title: String,
-    onClick: (() -> Unit)? = null
+    onClick: (() -> Unit)? = null,
+    iconSize: Dp = 48.dp
 ) {
     val shape = RoundedCornerShape(16.dp)
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(66.dp)
+            .height(75.dp)
             .clip(shape)
             .background(BlueButton)
             .clickable(enabled = onClick != null) { onClick?.invoke() }
@@ -207,52 +199,15 @@ private fun MenuButton(
         Image(
             painter = painterResource(icon),
             contentDescription = title,
+            modifier = Modifier.size(iconSize)
         )
         Spacer(Modifier.width(14.dp))
         Text(
             text = title,
             fontFamily = PoppinsSemi,
             color = Color.White,
-            fontSize = 14.sp
+            fontSize = 16.sp
         )
-    }
-}
-
-@Composable
-private fun BottomNav(
-    modifier: Modifier = Modifier,
-    onBeranda: (() -> Unit)?,
-    onDirektori: (() -> Unit)?,
-    onRiwayat: (() -> Unit)?,
-    onAkun: (() -> Unit)?,
-) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(78.dp)
-    ) {
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(78.dp),
-            colors = CardDefaults.cardColors(containerColor = BlueMain),
-            shape = RoundedCornerShape(topStart = 22.dp, topEnd = 22.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
-        ) {}
-
-        Row(
-            modifier = Modifier
-                .align(Alignment.Center)
-                .fillMaxWidth()
-                .padding(horizontal = 28.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            NavItem(icon = R.drawable.homeoren, label = "Beranda", active = true,  onClick = onBeranda)
-            NavItem(icon = R.drawable.icon_direktori, label = "Direktori", active = false, onClick = onDirektori)
-            NavItem(icon = R.drawable.icon_riwayat,   label = "Riwayat",   active = false, onClick = onRiwayat)
-            NavItem(icon = R.drawable.icon_akun,      label = "Akun",      active = false, onClick = onAkun)
-        }
     }
 }
 
@@ -264,7 +219,7 @@ private fun NavItem(
     onClick: (() -> Unit)?
 ) {
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
+        horizontalAlignment = Alignment.Start,
         modifier = Modifier.clickable(enabled = onClick != null) { onClick?.invoke() }
     ) {
         Image(

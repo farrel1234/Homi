@@ -88,6 +88,7 @@ fun FormPengaduanScreen(
                         .clip(CircleShape)
                         .clickable(enabled = onBack != null) { onBack?.invoke() }
                 )
+                Spacer(Modifier.height(24.dp))
                 Spacer(Modifier.width(8.dp))
                 Text(
                     text = "Formulir Pengaduan",
@@ -95,7 +96,7 @@ fun FormPengaduanScreen(
                     fontSize = 22.sp,
                     color = Color.White,
                     modifier = Modifier.weight(1f),
-                    textAlign = TextAlign.Start
+                    textAlign = TextAlign.Center
                 )
                 Spacer(Modifier.width(24.dp))
             }
@@ -113,12 +114,12 @@ fun FormPengaduanScreen(
                     .padding(horizontal = 24.dp)
             )
 
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(24.dp))
 
             /* Kontainer putih rounded */
             Card(
                 modifier = Modifier.fillMaxSize(),
-                shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
+                shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White)
             ) {
                 Column(

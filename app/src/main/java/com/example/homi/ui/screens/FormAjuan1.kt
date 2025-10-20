@@ -70,7 +70,7 @@ fun FormAjuan1() {
             text = "Silahkan mengisi data formulir dibawah ini,\nuntuk melakukan pengajuan layanan:",
             fontFamily = poppins,
             color = Color.White,
-            fontSize = 13.sp,
+            fontSize = 12.sp,
             lineHeight = 18.sp,
             modifier = Modifier.padding(horizontal = 32.dp),
             textAlign = androidx.compose.ui.text.style.TextAlign.Center

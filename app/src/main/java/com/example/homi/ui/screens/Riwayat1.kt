@@ -54,7 +54,7 @@ fun Riwayat1Screen(
         Text(
             text = "Riwayat Pengaduan",
             fontFamily = PoppinsSemi,
-            fontSize = 26.sp,
+            fontSize = 22.sp,
             color = Color.White,
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center
@@ -78,7 +78,7 @@ fun Riwayat1Screen(
         Spacer(Modifier.height(16.dp))
         Card(
             modifier = Modifier.fillMaxSize(),
-            shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
+            shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
             colors = CardDefaults.cardColors(containerColor = Color.White)
         ) {
             Spacer(Modifier.height(16.dp))

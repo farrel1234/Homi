@@ -67,12 +67,12 @@ fun LaporkanMasalahScreen(
                 .navigationBarsPadding()
         ) {
             /* ===== Header (judul + subjudul) ===== */
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(16.dp))
             Text(
                 text = "Laporkan Masalah",
                 color = Color.White,
                 fontFamily = PoppinsSemi,
-                fontSize = 20.sp,
+                fontSize = 22.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -80,7 +80,7 @@ fun LaporkanMasalahScreen(
             )
             Spacer(Modifier.height(6.dp))
             Text(
-                text = "Laporin yaaa kalau ada masalah dengan aplikasi kami!",
+                text = "Laporkan jika ada masalah dengan aplikasi kami!",
                 color = Color.White.copy(alpha = 0.9f),
                 fontFamily = PoppinsReg,
                 fontSize = 12.sp,
@@ -91,10 +91,10 @@ fun LaporkanMasalahScreen(
             )
 
             /* ===== Panel putih rounded ===== */
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(24.dp))
             Surface(
                 color = Color.White,
-                shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
+                shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
                 tonalElevation = 0.dp,
                 shadowElevation = 0.dp,
                 modifier = Modifier.fillMaxSize()

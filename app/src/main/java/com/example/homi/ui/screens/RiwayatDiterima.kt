@@ -54,7 +54,7 @@ fun RiwayatDiterimaScreen() {
                 text = "Riwayat Pengajuan",
                 color = Color.White,
                 fontFamily = PoppinsSemi,
-                fontSize = 20.sp,
+                fontSize = 22.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -77,7 +77,7 @@ fun RiwayatDiterimaScreen() {
             Spacer(Modifier.height(28.dp))
             Surface(
                 color = Color.White,
-                shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
+                shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
                 tonalElevation = 0.dp,
                 shadowElevation = 0.dp,
                 modifier = Modifier.fillMaxSize()
@@ -93,7 +93,7 @@ fun RiwayatDiterimaScreen() {
                     Text(
                         text = "Jenis Pengajuan:",
                         fontFamily = PoppinsReg,
-                        fontSize = 13.sp,
+                        fontSize = 14.sp,
                         color = LabelGray
                     )
                     Text(

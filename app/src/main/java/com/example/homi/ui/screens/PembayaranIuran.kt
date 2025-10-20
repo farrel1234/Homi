@@ -92,10 +92,10 @@ fun PembayaranIuranScreen(
         )
 
         /* ===== WHITE CONTAINER ===== */
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(16.dp))
         Card(
             modifier = Modifier.fillMaxSize(),
-            shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
+            shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
             colors = CardDefaults.cardColors(containerColor = Color.White)
         ) {
             Column(
