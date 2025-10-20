@@ -14,7 +14,6 @@ android {
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -28,23 +27,19 @@ android {
         }
     }
 
+    // ✅ Compose & AGP modern → pakai Java 17
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
-
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
 
-    buildFeatures {
-        compose = true
-    }
+    buildFeatures { compose = true }
 
-    // ✅ Tambahkan ini agar kompatibel dengan Compose Material3 terbaru
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
-    }
+    // ❌ Hapus block ini, tidak diperlukan & bisa bentrok
+    // composeOptions { kotlinCompilerExtensionVersion = "1.5.1" }
 }
 
 dependencies {
@@ -52,50 +47,32 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
 
-    // Compose BOM
+    // ✅ Compose BOM (SATU kali saja)
     implementation(platform(libs.androidx.compose.bom))
 
+    // Compose UI
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
+    debugImplementation(libs.androidx.ui.tooling)
 
-    // Material 3
+    // Material 3 (ikuti versi BOM)
     implementation(libs.androidx.material3)
-    implementation("androidx.compose.material3:material3:1.3.0")
-    implementation("androidx.compose.material3:material3")
 
+    // ➕ Ikon extended (untuk Visibility / VisibilityOff)
+    implementation("androidx.compose.material:material-icons-extended")
 
-
-    implementation("androidx.compose.ui:ui-text")
-
-    // Jetpack Compose BOM: biar versi sinkron
-    implementation(platform("androidx.compose:compose-bom:2025.01.00"))
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.material3:material3")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    debugImplementation("androidx.compose.ui:ui-tooling")
-
-    implementation(platform("androidx.compose:compose-bom:2025.01.00"))
-    implementation("androidx.compose.material3:material3")
-    // (opsional tapi umum dipakai)
-    implementation("androidx.activity:activity-compose:1.9.3")
+    // Navigation Compose (sekali cukup)
     implementation("androidx.navigation:navigation-compose:2.8.3")
 
-    // **Navigation-Compose** (ini yang penting)
-    implementation("androidx.navigation:navigation-compose:2.8.3")
+    // (opsional, kalau butuh)
+    // implementation("androidx.navigation:navigation-runtime-ktx:2.8.3")
 
-    // (opsional, tapi membantu class NavController jika IDE ngeyel)
-    implementation("androidx.navigation:navigation-runtime-ktx:2.8.3")
-    // Unit Test
+    // Test
     testImplementation(libs.junit)
-
-    // Android Test
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
-
-    // Debug Tools
-    debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }
