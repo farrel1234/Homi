@@ -28,7 +28,6 @@ import com.example.homi.R
 private val BlueMain     = Color(0xFF2F7FA3)
 private val BlueButton   = Color(0xFF4F8EA9)
 private val AccentOrange = Color(0xFFE26A2C)
-private val Cream        = Color(0xFFFFF6EE)
 
 private val PoppinsSemi = FontFamily(Font(R.font.poppins_semibold))
 private val PoppinsReg  = FontFamily(Font(R.font.poppins_regular))
@@ -38,7 +37,7 @@ private val SuezOne     = FontFamily(Font(R.font.suez_one_regular))
 fun DashboardScreen(
     onPengajuan: (() -> Unit)? = null,
     onPengaduan: (() -> Unit)? = null,
-    onPembayaran:(() -> Unit)? = null,
+    onPembayaran: (() -> Unit)? = null,
 ) {
     Box(Modifier.fillMaxSize()) {
 
@@ -65,22 +64,33 @@ fun DashboardScreen(
                 )
                 Spacer(Modifier.width(12.dp))
                 Column {
-                    Text("Hai, Lily",
-                        fontFamily = PoppinsSemi, fontSize = 20.sp, color = Color.White)
-                    Text("Selamat Datang di Homi",
-                        fontFamily = PoppinsSemi, fontSize = 20.sp, color = Color.White)
-                    Text("Menghubungkan Warga, Membangun Kebersamaan",
-                        fontFamily = PoppinsReg, fontSize = 12.sp, color = Color.White)
+                    Text(
+                        "Hai, Lily",
+                        fontFamily = PoppinsSemi,
+                        fontSize = 20.sp,
+                        color = Color.White
+                    )
+                    Text(
+                        "Selamat Datang di Homi",
+                        fontFamily = PoppinsSemi,
+                        fontSize = 20.sp,
+                        color = Color.White
+                    )
+                    Text(
+                        "Menghubungkan Warga, Membangun Kebersamaan",
+                        fontFamily = PoppinsReg,
+                        fontSize = 12.sp,
+                        color = Color.White
+                    )
                 }
                 Spacer(Modifier.weight(1f))
-                // titik tiga, notifikasi, dll bisa ditambah di sini
+                // titik tiga, notifikasi, dll → nanti di sini
             }
 
             /* ===== Container putih rounded ===== */
             Spacer(Modifier.height(10.dp))
             Card(
-                modifier = Modifier
-                    .fillMaxSize(),
+                modifier = Modifier.fillMaxSize(),
                 shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White)
             ) {
@@ -150,26 +160,24 @@ fun DashboardScreen(
                         icon = R.drawable.icon_pengajuan,
                         title = "    Pengajuan Layanan",
                         onClick = onPengajuan,
-                        iconSize = 45.dp
-
+                        iconSize = 48.dp
                     )
                     Spacer(Modifier.height(14.dp))
                     MenuButton(
                         icon = R.drawable.icon_pengaduan,
                         title = "Pengaduan Warga",
                         onClick = onPengaduan,
-                        iconSize = 72.dp
+                        iconSize = 48.dp
                     )
                     Spacer(Modifier.height(14.dp))
                     MenuButton(
                         icon = R.drawable.icon_pembayaran,
                         title = "Pembayaran Iuran",
                         onClick = onPembayaran,
-                        iconSize = 72.dp
-
+                        iconSize = 48.dp
                     )
 
-                    Spacer(Modifier.height(90.dp)) // ruang untuk nav bar
+                    Spacer(Modifier.height(24.dp))
                 }
             }
         }
@@ -189,7 +197,7 @@ private fun MenuButton(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(75.dp)
+            .height(72.dp)
             .clip(shape)
             .background(BlueButton)
             .clickable(enabled = onClick != null) { onClick?.invoke() }
@@ -207,32 +215,6 @@ private fun MenuButton(
             fontFamily = PoppinsSemi,
             color = Color.White,
             fontSize = 16.sp
-        )
-    }
-}
-
-@Composable
-private fun NavItem(
-    icon: Int,
-    label: String,
-    active: Boolean,
-    onClick: (() -> Unit)?
-) {
-    Column(
-        horizontalAlignment = Alignment.Start,
-        modifier = Modifier.clickable(enabled = onClick != null) { onClick?.invoke() }
-    ) {
-        Image(
-            painter = painterResource(icon),
-            contentDescription = label,
-            modifier = Modifier.size(26.dp)
-        )
-        Spacer(Modifier.height(4.dp))
-        Text(
-            text = label,
-            fontFamily = PoppinsSemi,
-            fontSize = 10.sp,
-            color = if (active) AccentOrange else Color(0xFFECECEC)
         )
     }
 }

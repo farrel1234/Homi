@@ -62,10 +62,30 @@ dependencies {
     // Material 3
     implementation(libs.androidx.material3)
     implementation("androidx.compose.material3:material3:1.3.0")
+    implementation("androidx.compose.material3:material3")
+
+
 
     implementation("androidx.compose.ui:ui-text")
 
+    // Jetpack Compose BOM: biar versi sinkron
+    implementation(platform("androidx.compose:compose-bom:2025.01.00"))
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    debugImplementation("androidx.compose.ui:ui-tooling")
 
+    implementation(platform("androidx.compose:compose-bom:2025.01.00"))
+    implementation("androidx.compose.material3:material3")
+    // (opsional tapi umum dipakai)
+    implementation("androidx.activity:activity-compose:1.9.3")
+    implementation("androidx.navigation:navigation-compose:2.8.3")
+
+    // **Navigation-Compose** (ini yang penting)
+    implementation("androidx.navigation:navigation-compose:2.8.3")
+
+    // (opsional, tapi membantu class NavController jika IDE ngeyel)
+    implementation("androidx.navigation:navigation-runtime-ktx:2.8.3")
     // Unit Test
     testImplementation(libs.junit)
 

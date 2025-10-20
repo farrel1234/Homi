@@ -29,6 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import com.example.homi.R
 import kotlinx.coroutines.delay
 
@@ -55,18 +56,14 @@ fun FormPengaduanScreen(
 ) {
     val poppins = FontFamily(Font(R.font.poppins_regular))
 
-    // state input
     var nama by rememberSaveable { mutableStateOf("") }
     var tanggal by rememberSaveable { mutableStateOf("") }
     var tempat by rememberSaveable { mutableStateOf("") }
     var perihal by rememberSaveable { mutableStateOf("") }
 
-    // state popup
     var showPopup by rememberSaveable { mutableStateOf(false) }
 
-    // ROOT stack
     Box(modifier = Modifier.fillMaxSize()) {
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -88,7 +85,6 @@ fun FormPengaduanScreen(
                         .clip(CircleShape)
                         .clickable(enabled = onBack != null) { onBack?.invoke() }
                 )
-                Spacer(Modifier.height(24.dp))
                 Spacer(Modifier.width(8.dp))
                 Text(
                     text = "Formulir Pengaduan",
@@ -101,7 +97,6 @@ fun FormPengaduanScreen(
                 Spacer(Modifier.width(24.dp))
             }
 
-            /* Subjudul */
             Text(
                 text = "Untuk melaporkan masalah di area lingkungan Anda,\nsilahkan mengisi data formulir dibawah ini:",
                 fontFamily = PoppinsReg,
@@ -116,7 +111,6 @@ fun FormPengaduanScreen(
 
             Spacer(Modifier.height(24.dp))
 
-            /* Kontainer putih rounded */
             Card(
                 modifier = Modifier.fillMaxSize(),
                 shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
@@ -129,8 +123,6 @@ fun FormPengaduanScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Spacer(Modifier.height(16.dp))
-
-                    // Card form dengan border biru
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(16.dp),
@@ -138,46 +130,23 @@ fun FormPengaduanScreen(
                         colors = CardDefaults.cardColors(containerColor = Color.White)
                     ) {
                         Spacer(Modifier.height(16.dp))
-                        Column(
-                            modifier = Modifier.padding(16.dp)
-                        ) {
-                            // Field: Nama Pelapor
+                        Column(modifier = Modifier.padding(16.dp)) {
                             FieldLabel("Nama Pelapor")
-                            UnderlineTextField(
-                                value = nama,
-                                onValueChange = { nama = it }
-                            )
-
+                            UnderlineTextField(value = nama, onValueChange = { nama = it })
                             Spacer(Modifier.height(16.dp))
 
-                            // Field: Tanggal
                             FieldLabel("Tanggal")
-                            UnderlineTextField(
-                                value = tanggal,
-                                onValueChange = { tanggal = it }
-                            )
-
+                            UnderlineTextField(value = tanggal, onValueChange = { tanggal = it })
                             Spacer(Modifier.height(16.dp))
 
-                            // Field: Tempat
                             FieldLabel("Tempat")
-                            UnderlineTextField(
-                                value = tempat,
-                                onValueChange = { tempat = it }
-                            )
-
+                            UnderlineTextField(value = tempat, onValueChange = { tempat = it })
                             Spacer(Modifier.height(16.dp))
 
-                            // Field: Perihal
                             FieldLabel("Perihal")
-                            UnderlineTextField(
-                                value = perihal,
-                                onValueChange = { perihal = it }
-                            )
-
+                            UnderlineTextField(value = perihal, onValueChange = { perihal = it })
                             Spacer(Modifier.height(16.dp))
 
-                            // Upload Foto
                             FieldLabel("Upload Foto")
                             Column(horizontalAlignment = Alignment.Start) {
                                 Box(
@@ -206,10 +175,7 @@ fun FormPengaduanScreen(
                             }
 
                             Button(
-                                onClick = {
-                                    // Munculkan popup dulu; submit/navigasi dipanggil saat popup selesai
-                                    showPopup = true
-                                },
+                                onClick = { showPopup = true },
                                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFA06B)),
                                 shape = RoundedCornerShape(10.dp),
                                 modifier = Modifier
@@ -232,7 +198,7 @@ fun FormPengaduanScreen(
             }
         }
 
-        /* ===== POPUP sesuai desain ===== */
+        /* ===== POPUP FIX CENTER ===== */
         if (showPopup) {
             SuccessPopup10s(
                 successImage = successImage,
@@ -240,9 +206,7 @@ fun FormPengaduanScreen(
                 message = "Formulir Pengaduan Anda\nBerhasil Dikirim !",
                 onFinished = {
                     showPopup = false
-                    // Lakukan submit/navigasi setelah popup selesai
                     onKonfirmasi?.invoke(nama, tanggal, tempat, perihal)
-                    // (opsional) reset field
                     nama = ""; tanggal = ""; tempat = ""; perihal = ""
                 }
             )
@@ -251,7 +215,6 @@ fun FormPengaduanScreen(
 }
 
 /* ===== Subcomponents ===== */
-
 @Composable
 private fun FieldLabel(text: String) {
     Text(
@@ -282,7 +245,6 @@ private fun UnderlineTextField(
                 .fillMaxWidth()
                 .padding(bottom = 6.dp)
         )
-        // garis bawah
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -292,7 +254,7 @@ private fun UnderlineTextField(
     }
 }
 
-/* ===== POPUP builder (overlay) ===== */
+/* ===== POPUP (benar-benar di tengah layar) ===== */
 @Composable
 private fun SuccessPopup10s(
     @DrawableRes successImage: Int? = null,
@@ -300,119 +262,114 @@ private fun SuccessPopup10s(
     message: String,
     onFinished: () -> Unit
 ) {
-    // Auto close 10 detik
     LaunchedEffect(Unit) {
-        kotlinx.coroutines.delay(10_000L)
+        delay(5_000L)
         onFinished()
     }
 
-    // Scrim + container untuk badge overlap
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0x99000000)) // scrim 60%
+            .background(Color(0x99000000))
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null
-            ) { /* blokir tap ke bawah */ },
-        contentAlignment = Alignment.TopCenter
+            ) { }
     ) {
-        // Wrapper agar badge bisa "menempel" di atas kartu
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp)
-                .padding(top = 88.dp), // jarak dari tepi atas layar
-            contentAlignment = Alignment.TopCenter
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
         ) {
-            // === KARTU UTAMA (matching desain) ===
-            val cardShape = RoundedCornerShape(22.dp)
-            Card(
-                shape = cardShape,
-                border = BorderStroke(2.dp, BlueBorder),                   // garis tepi biru
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                elevation = CardDefaults.cardElevation(defaultElevation = 12.dp), // shadow lembut
-                modifier = Modifier
-                    .widthIn(max = 320.dp)
-                    .fillMaxWidth()
-                    .padding(top = 32.dp) // ruang agar badge bisa overlap
-            ) {
-                Column(
-                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 22.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+            Box(contentAlignment = Alignment.TopCenter) {
+                Card(
+                    shape = RoundedCornerShape(22.dp),
+                    border = BorderStroke(2.dp, BlueBorder),
+                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 12.dp),
+                    modifier = Modifier
+                        .fillMaxWidth(0.86f)
+                        .widthIn(max = 360.dp)
+                        .defaultMinSize(minHeight = 340.dp)
+                        .padding(top = 38.dp)
+                        .zIndex(1f)
                 ) {
-                    successImage?.let {
-                        Image(
-                            painter = painterResource(id = it),
-                            contentDescription = "Sukses",
-                            contentScale = ContentScale.Fit,
-                            modifier = Modifier.size(150.dp) // proporsi seperti contoh
+                    Column(
+                        modifier = Modifier
+                            .padding(horizontal = 24.dp, vertical = 22.dp)
+                            .fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        successImage?.let {
+                            Image(
+                                painter = painterResource(id = it),
+                                contentDescription = "Sukses",
+                                contentScale = ContentScale.Fit,
+                                modifier = Modifier.size(160.dp)
+                            )
+                            Spacer(Modifier.height(16.dp))
+                        }
+                        Text(
+                            text = message,
+                            fontFamily = PoppinsSemi,
+                            fontSize = 18.sp,
+                            color = TextPrimary,
+                            textAlign = TextAlign.Center,
+                            lineHeight = 24.sp
                         )
-                        Spacer(Modifier.height(14.dp))
+                        Spacer(Modifier.height(12.dp))
                     }
-                    Text(
-                        text = message,
-                        fontFamily = PoppinsSemi,
-                        fontSize = 16.sp,
-                        color = TextPrimary,
-                        textAlign = TextAlign.Center,
-                        lineHeight = 22.sp
-                    )
                 }
-            }
 
-            // === BADGE LONCENG NEMPEL DI ATAS KARTU ===
-            // Cincin putih -> lingkaran biru -> ikon lonceng -> badge angka oranye
-            Box(
-                modifier = Modifier
-                    .offset(y = (-18).dp) // overlap ke kartu seperti mockup
-                    .size(72.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                // Cincin putih
                 Box(
                     modifier = Modifier
-                        .size(72.dp)
-                        .clip(CircleShape)
-                        .background(Color.White)
-                )
-                // Lingkaran biru
-                Box(
-                    modifier = Modifier
-                        .size(60.dp)
-                        .clip(CircleShape)
-                        .background(BlueMain),
+                        .align(Alignment.TopCenter)
+                        .offset(y = (-20).dp)
+                        .size(74.dp)
+                        .zIndex(2f),
                     contentAlignment = Alignment.Center
                 ) {
-                    Image(
-                        painter = painterResource(id = bellIcon),
-                        contentDescription = "Notifikasi",
-                        contentScale = ContentScale.Fit,
-                        modifier = Modifier.size(28.dp)
-                    )
-                    // Titik/angka notifikasi di pojok kanan atas (oranye dengan angka "1")
                     Box(
                         modifier = Modifier
-                            .align(Alignment.TopEnd)
-                            .offset(x = 6.dp, y = (-6).dp) // posisi persis kayak contoh
-                            .size(18.dp)
+                            .size(74.dp)
                             .clip(CircleShape)
-                            .background(Color.White),
+                            .background(Color.White)
+                    )
+                    Box(
+                        modifier = Modifier
+                            .size(62.dp)
+                            .clip(CircleShape)
+                            .background(BlueMain),
                         contentAlignment = Alignment.Center
                     ) {
+                        Image(
+                            painter = painterResource(id = bellIcon),
+                            contentDescription = "Notifikasi",
+                            contentScale = ContentScale.Fit,
+                            modifier = Modifier.size(28.dp)
+                        )
                         Box(
                             modifier = Modifier
-                                .size(14.dp)
+                                .align(Alignment.TopEnd)
+                                .offset(x = 6.dp, y = (-6).dp)
+                                .size(18.dp)
                                 .clip(CircleShape)
-                                .background(Color(0xFFFF9966)),
+                                .background(Color.White),
                             contentAlignment = Alignment.Center
                         ) {
-                            Text(
-                                text = "1",
-                                color = Color.White,
-                                fontFamily = PoppinsSemi,
-                                fontSize = 10.sp
-                            )
+                            Box(
+                                modifier = Modifier
+                                    .size(14.dp)
+                                    .clip(CircleShape)
+                                    .background(Color(0xFFFF9966)),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = "1",
+                                    color = Color.White,
+                                    fontFamily = PoppinsSemi,
+                                    fontSize = 10.sp
+                                )
+                            }
                         }
                     }
                 }
@@ -427,7 +384,7 @@ private fun SuccessPopup10s(
 private fun PreviewFormPengaduan() {
     MaterialTheme {
         FormPengaduanScreen(
-            onKonfirmasi = { _, _, _, _ -> /* no-op di preview */ }
+            onKonfirmasi = { _, _, _, _ -> }
         )
     }
 }
