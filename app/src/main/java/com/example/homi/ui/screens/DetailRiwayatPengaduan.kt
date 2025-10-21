@@ -1,6 +1,7 @@
 package com.example.homi.ui.screens
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -24,10 +25,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.homi.R
 
-/* ===== TOKENS ===== */
-private val BlueBorder   = Color(0xFF2F7FA3)
-private val TitleOrange  = Color(0xFFE69B73)
-private val TextPrimary  = Color(0xFF121212)
+/* ===== Tokens ===== */
+private val BlueMain    = Color(0xFF000000)
+private val BlueBorder  = Color(0xFF2F7FA3)
+private val OrangeTitle = Color(0xFFE69B73)
+private val TextDark    = Color(0xFF0E0E0E)
 
 private val PoppinsSemi = FontFamily(Font(R.font.poppins_semibold))
 private val PoppinsReg  = FontFamily(Font(R.font.poppins_regular))
@@ -41,35 +43,31 @@ fun DetailRiwayatPengaduan(
         "Sampah Berserakan di Jalan, lingkungan menjadi kotor, bau dan banyak lalat.",
     @DrawableRes headerImage: Int = R.drawable.sampah
 ) {
-    val outerRadius = 36.dp
-    val cardRadius  = 16.dp
-
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White) // <- pastikan putih, biar ga ada warna lain
+            .background(Color.White)
     ) {
-        /** HEADER FOTO — dilebarkan supaya nutup area atas */
+        /* Header image — tinggi dibuat besar agar menutup area atas */
         Image(
-            painter = painterResource(id = headerImage),
+            painter = painterResource(headerImage),
             contentDescription = null,
+            contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(280.dp),          // <- dinaikkan (nutup area hijau/warna lain)
-            contentScale = ContentScale.Crop
+                .height(260.dp)
         )
-
-        /** LEMBAR PUTIH MELENGKUNG – ditarik ke atas supaya nempel foto */
+        Spacer(Modifier.height(-960.dp))
+        /* Panel putih melengkung menimpa gambar */
         Surface(
             color = Color.White,
-            shape = RoundedCornerShape(topStart = outerRadius, topEnd = outerRadius),
+            shape = RoundedCornerShape(topStart = 36.dp, topEnd = 36.dp),
             modifier = Modifier
                 .fillMaxSize()
-                .offset(y = (-48).dp)     // <- ditarik lebih ke atas
+                .offset(y = (-92).dp)
         ) {
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
                     .verticalScroll(rememberScrollState())
                     .padding(horizontal = 16.dp, vertical = 18.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -79,50 +77,66 @@ fun DetailRiwayatPengaduan(
                     fontFamily = PoppinsSemi,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 22.sp,
-                    color = TitleOrange,
+                    color = OrangeTitle,
+                    textAlign = TextAlign.Center,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = 12.dp),
-                    textAlign = TextAlign.Center
+                        .padding(bottom = 12.dp, top = 6.dp)
                 )
-
                 Card(
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(cardRadius),
-                    border = androidx.compose.foundation.BorderStroke(2.dp, BlueBorder),
+                    shape = RoundedCornerShape(16.dp),
+                    border = BorderStroke(2.dp, BlueBorder),
                     colors = CardDefaults.cardColors(containerColor = Color.White),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+                    elevation = CardDefaults.cardElevation(0.dp)
                 ) {
                     Column(Modifier.padding(16.dp)) {
-                        ValueLine(nama)
-                        DividerLine()
 
-                        ValueLine(tanggal)
+                        FieldLabel("Nama Pelapor")
+                        ValueText(nama)
                         DividerLine()
-
-                        ValueLine(tempat)
+                        Spacer(Modifier.height(10.dp))
+                        FieldLabel("Tanggal")
+                        ValueText(tanggal)
                         DividerLine()
-
+                        Spacer(Modifier.height(5.dp))
+                        FieldLabel("Tempat")
+                        ValueText(tempat)
+                        DividerLine()
+                        Spacer(Modifier.height(5.dp))
+                        FieldLabel("Perihal")
                         ValueParagraph(perihal)
                         DividerLine()
+                        Spacer(Modifier.height(135.dp))
                     }
                 }
 
-                Spacer(Modifier.height(24.dp))
+                Spacer(Modifier.height(20.dp))
             }
         }
     }
 }
 
-/* ===== SUB UI ===== */
+/* ===== Subcomponents ===== */
 
 @Composable
-private fun ValueLine(text: String) {
+private fun FieldLabel(text: String) {
+    Text(
+        text = text,
+        fontFamily = PoppinsSemi,
+        fontSize = 14.sp,
+        color = TextDark
+    )
+    Spacer(Modifier.height(6.dp))
+}
+
+@Composable
+private fun ValueText(text: String) {
     Text(
         text = text,
         fontFamily = PoppinsReg,
         fontSize = 14.sp,
-        color = TextPrimary
+        color = TextDark
     )
 }
 
@@ -132,25 +146,25 @@ private fun ValueParagraph(text: String) {
         text = text,
         fontFamily = PoppinsReg,
         fontSize = 14.sp,
-        color = TextPrimary,
-        lineHeight = 20.sp
+        lineHeight = 20.sp,
+        color = TextDark
     )
 }
 
 @Composable
 private fun DividerLine() {
-    Spacer(Modifier.height(8.dp))
+    Spacer(Modifier.height(10.dp))
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(1.dp)
             .clip(RoundedCornerShape(1.dp))
-            .background(BlueBorder.copy(alpha = 0.75f))
+            .background(BlueMain.copy(alpha = 0.9f))
     )
-    Spacer(Modifier.height(12.dp))
+    Spacer(Modifier.height(14.dp))
 }
 
-/* ===== PREVIEW ===== */
+/* ===== Preview (untuk Interactive Mode) ===== */
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun PreviewDetailRiwayatPengaduan() {
