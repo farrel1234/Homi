@@ -1,12 +1,10 @@
 package com.example.homi.ui.screens
 
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
@@ -19,158 +17,142 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.homi.R
 
-/* ===== THEME COLORS ===== */
-private val BlueMain = Color(0xFF2F7FA3)
-private val BlueBorder = Color(0xFF2F7FA3)
-private val BlueText = Color(0xFF2F7FA3)
-private val AccentOrange = Color(0xFFFF9966)
-private val TextPrimary = Color(0xFF0E0E0E)
-private val DividerGray = Color(0xFF2F7FA3)
+/* ===== TOKENS ===== */
+private val BlueBorder   = Color(0xFF2F7FA3)
+private val TitleOrange  = Color(0xFFE69B73)
+private val TextPrimary  = Color(0xFF121212)
 
 private val PoppinsSemi = FontFamily(Font(R.font.poppins_semibold))
-private val PoppinsReg = FontFamily(Font(R.font.poppins_regular))
+private val PoppinsReg  = FontFamily(Font(R.font.poppins_regular))
 
 @Composable
-fun DetailRiwayatPengaduanScreen(
-    namaPelapor: String = "Lily",
+fun DetailRiwayatPengaduan(
+    nama: String = "Lily",
     tanggal: String = "1 Oktober 2025",
     tempat: String = "di depan lapangan voli",
-    perihal: String = "Sampah Berserakan di Jalan, lingkungan menjadi kotor, bau dan banyak lalat.",
-    @DrawableRes headerImage: Int = R.drawable.sampah, // background foto
-    @DrawableRes backIcon: Int = R.drawable.panahkembali, // ikon panah
-    onBack: (() -> Unit)? = null
+    perihal: String =
+        "Sampah Berserakan di Jalan, lingkungan menjadi kotor, bau dan banyak lalat.",
+    @DrawableRes headerImage: Int = R.drawable.sampah
 ) {
+    val outerRadius = 36.dp
+    val cardRadius  = 16.dp
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
-            .statusBarsPadding()
+            .background(Color.White) // <- pastikan putih, biar ga ada warna lain
     ) {
-        /* ===== Header Gambar ===== */
-        Box(
+        /** HEADER FOTO — dilebarkan supaya nutup area atas */
+        Image(
+            painter = painterResource(id = headerImage),
+            contentDescription = null,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(230.dp)
-                .clip(RoundedCornerShape(bottomStart = 28.dp, bottomEnd = 28.dp))
-        ) {
-            Image(
-                painter = painterResource(headerImage),
-                contentDescription = "Foto Pengaduan",
-                modifier = Modifier.fillMaxSize(),
+                .height(280.dp),          // <- dinaikkan (nutup area hijau/warna lain)
+            contentScale = ContentScale.Crop
+        )
 
-            )
-            IconButton(
-                onClick = { onBack?.invoke() },
-                modifier = Modifier
-                    .align(Alignment.TopStart)
-                    .padding(8.dp)
-                    .size(36.dp)
-                    .clip(CircleShape)
-            ) {
-                Icon(painter = painterResource(backIcon), contentDescription = "Kembali")
-            }
-        }
-
-        /* ===== Konten Putih ===== */
-        Spacer(Modifier.height(8.dp))
-        Card(
+        /** LEMBAR PUTIH MELENGKUNG – ditarik ke atas supaya nempel foto */
+        Surface(
+            color = Color.White,
+            shape = RoundedCornerShape(topStart = outerRadius, topEnd = outerRadius),
             modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f),
-            shape = RoundedCornerShape(topStart = 36.dp, topEnd = 36.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White)
+                .fillMaxSize()
+                .offset(y = (-48).dp)     // <- ditarik lebih ke atas
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
-                    .padding(vertical = 20.dp),
+                    .padding(horizontal = 16.dp, vertical = 18.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Judul
                 Text(
                     text = "Riwayat Pengaduan",
                     fontFamily = PoppinsSemi,
-                    fontSize = 20.sp,
-                    color = AccentOrange,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                Spacer(Modifier.height(12.dp))
-
-                // Kartu detail
-                Card(
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 22.sp,
+                    color = TitleOrange,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    shape = RoundedCornerShape(16.dp),
-                    border = BorderStroke(2.dp, BlueBorder),
-                    colors = CardDefaults.cardColors(containerColor = Color.White)
+                        .padding(bottom = 12.dp),
+                    textAlign = TextAlign.Center
+                )
+
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(cardRadius),
+                    border = androidx.compose.foundation.BorderStroke(2.dp, BlueBorder),
+                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                 ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 14.dp)
-                    ) {
-                        DetailField("Nama Pelapor", namaPelapor)
+                    Column(Modifier.padding(16.dp)) {
+                        ValueLine(nama)
                         DividerLine()
 
-                        DetailField("Tanggal", tanggal)
+                        ValueLine(tanggal)
                         DividerLine()
 
-                        DetailField("Tempat", tempat)
+                        ValueLine(tempat)
                         DividerLine()
 
-                        DetailField("Perihal", perihal, true)
+                        ValueParagraph(perihal)
+                        DividerLine()
                     }
                 }
+
+                Spacer(Modifier.height(24.dp))
             }
         }
     }
 }
 
-/* ===== Reusable Subcomponents ===== */
+/* ===== SUB UI ===== */
+
 @Composable
-private fun DetailField(title: String, value: String, multiLine: Boolean = false) {
+private fun ValueLine(text: String) {
     Text(
-        text = title,
-        fontFamily = PoppinsSemi,
+        text = text,
+        fontFamily = PoppinsReg,
         fontSize = 14.sp,
-        color = BlueText
+        color = TextPrimary
     )
-    Spacer(Modifier.height(4.dp))
+}
+
+@Composable
+private fun ValueParagraph(text: String) {
     Text(
-        text = value,
+        text = text,
         fontFamily = PoppinsReg,
         fontSize = 14.sp,
         color = TextPrimary,
-        lineHeight = if (multiLine) 20.sp else 18.sp
+        lineHeight = 20.sp
     )
 }
 
 @Composable
 private fun DividerLine() {
-    Spacer(Modifier.height(6.dp))
-    Divider(
-        color = DividerGray,
-        thickness = 1.dp,
-        modifier = Modifier.fillMaxWidth()
+    Spacer(Modifier.height(8.dp))
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(1.dp)
+            .clip(RoundedCornerShape(1.dp))
+            .background(BlueBorder.copy(alpha = 0.75f))
     )
-    Spacer(Modifier.height(10.dp))
+    Spacer(Modifier.height(12.dp))
 }
 
-/* ===== Preview ===== */
+/* ===== PREVIEW ===== */
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun PreviewDetailRiwayatPengaduan() {
-    MaterialTheme {
-        DetailRiwayatPengaduanScreen()
-    }
+    MaterialTheme { DetailRiwayatPengaduan() }
 }
