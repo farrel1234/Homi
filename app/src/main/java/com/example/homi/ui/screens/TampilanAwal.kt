@@ -1,6 +1,7 @@
 package com.example.homi.ui.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -22,13 +23,10 @@ import com.example.homi.R
 fun TampilanAwalScreen(
     onNextClicked: () -> Unit = {}
 ) {
-    // font
     val laBelleAurore = FontFamily(Font(R.font.la_belle_aurore))
     val poppins = FontFamily(Font(R.font.poppins_semibold))
 
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
+    Box(modifier = Modifier.fillMaxSize()) {
         Image(
             painter = painterResource(id = R.drawable.loading_screen),
             contentDescription = "Background",
@@ -69,8 +67,11 @@ fun TampilanAwalScreen(
 
             Spacer(modifier = Modifier.height(70.dp))
 
+            // 🔹 area klik kanan-bawah
             Box(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onNextClicked() },   // ← aktifkan klik
                 contentAlignment = Alignment.BottomEnd
             ) {
                 Text(
@@ -79,7 +80,9 @@ fun TampilanAwalScreen(
                     fontWeight = FontWeight.Bold,
                     fontFamily = poppins,
                     color = Color.White,
-                    modifier = Modifier.padding(end = 8.dp, bottom = 8.dp)
+                    modifier = Modifier
+                        .padding(end = 8.dp, bottom = 8.dp)
+                        .clickable { onNextClicked() }   // ← teks juga bisa diklik
                 )
             }
         }

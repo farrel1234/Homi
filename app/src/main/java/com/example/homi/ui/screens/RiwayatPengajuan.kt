@@ -1,6 +1,7 @@
 package com.example.homi.ui.screens
 
 import androidx.compose.foundation.BorderStroke
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -88,7 +89,6 @@ fun RiwayatPengajuanScreen(
             Column(Modifier.fillMaxSize()) {
 
                 Spacer(Modifier.height(14.dp))
-
                 /* Tabs */
                 Row(
                     modifier = Modifier

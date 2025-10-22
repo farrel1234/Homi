@@ -1,12 +1,18 @@
 package com.example.homi.ui.screens
 
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -20,8 +26,11 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.example.homi.R
-
+import kotlinx.coroutines.delay
+import com.example.homi.ui.components.OtpSentPopup
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,10 +48,9 @@ fun DaftarScreen(
     var passwordVisible by remember { mutableStateOf(false) }
     var confirmPasswordVisible by remember { mutableStateOf(false) }
 
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        // Background
+    var showPopup by remember { mutableStateOf(false) }
+
+    Box(modifier = Modifier.fillMaxSize()) {
         Image(
             painter = painterResource(id = R.drawable.daftar),
             contentDescription = "Background",
@@ -57,7 +65,6 @@ fun DaftarScreen(
                 .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Title
             Text(
                 text = "Daftar",
                 fontSize = 22.sp,
@@ -69,7 +76,7 @@ fun DaftarScreen(
                     .padding(bottom = 16.dp)
             )
 
-            // Username
+            // 🔹 Username
             OutlinedTextField(
                 value = username,
                 onValueChange = { username = it },
@@ -86,9 +93,9 @@ fun DaftarScreen(
                 )
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(Modifier.height(12.dp))
 
-            // Email
+            // 🔹 Email
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
@@ -105,9 +112,9 @@ fun DaftarScreen(
                 )
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(Modifier.height(12.dp))
 
-            // Password
+            // 🔹 Password
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
@@ -124,11 +131,12 @@ fun DaftarScreen(
                 ),
                 visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
-                    val icon = R.drawable.hide
                     IconButton(onClick = { passwordVisible = !passwordVisible }) {
                         Icon(
-                            painter = painterResource(id = icon),
-                            contentDescription = if (passwordVisible) "Hide password" else "Show password",
+                            painter = painterResource(
+                                id = if (passwordVisible) R.drawable.show else R.drawable.hide
+                            ),
+                            contentDescription = if (passwordVisible) "Sembunyikan password" else "Tampilkan password",
                             modifier = Modifier.size(24.dp),
                             tint = Color.Gray
                         )
@@ -136,9 +144,9 @@ fun DaftarScreen(
                 }
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(Modifier.height(12.dp))
 
-            // Confirm Password
+            // 🔹 Konfirmasi Password
             OutlinedTextField(
                 value = confirmPassword,
                 onValueChange = { confirmPassword = it },
@@ -155,11 +163,12 @@ fun DaftarScreen(
                 ),
                 visualTransformation = if (confirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
-                    val icon = R.drawable.hide
                     IconButton(onClick = { confirmPasswordVisible = !confirmPasswordVisible }) {
                         Icon(
-                            painter = painterResource(id = icon),
-                            contentDescription = if (confirmPasswordVisible) "Hide password" else "Show password",
+                            painter = painterResource(
+                                id = if (confirmPasswordVisible) R.drawable.show else R.drawable.hide
+                            ),
+                            contentDescription = if (confirmPasswordVisible) "Sembunyikan password" else "Tampilkan password",
                             modifier = Modifier.size(24.dp),
                             tint = Color.Gray
                         )
@@ -167,16 +176,16 @@ fun DaftarScreen(
                 }
             )
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(Modifier.height(20.dp))
 
-            // Button Konfirmasi
             Button(
-                onClick = {},
+                onClick = { showPopup = true },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFA06B)),
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .width(250.dp)
                     .height(48.dp)
+                    .align(Alignment.CenterHorizontally)
             ) {
                 Text(
                     text = "Konfirmasi",
@@ -187,9 +196,8 @@ fun DaftarScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(Modifier.height(16.dp))
 
-            // Login redirect text
             Row(
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.fillMaxWidth()
@@ -200,16 +208,26 @@ fun DaftarScreen(
                     fontFamily = poppins,
                     color = Color.Black
                 )
-                Spacer(modifier = Modifier.width(4.dp))
+                Spacer(Modifier.width(4.dp))
                 Text(
                     text = "Masuk",
                     fontSize = 10.sp,
                     fontFamily = poppins,
                     fontWeight = FontWeight.Bold,
                     color = Color.Blue,
-                    textDecoration = TextDecoration.Underline
+                    textDecoration = TextDecoration.Underline,
+                    modifier = Modifier.clickable { onLoginClicked() } // ⬅️ aktif
                 )
             }
+        }
+
+        if (showPopup) {
+            OtpSentPopup(
+                onDismiss = {
+                    showPopup = false
+                    onRegisterClicked()
+                }
+            )
         }
     }
 }
@@ -217,7 +235,5 @@ fun DaftarScreen(
 @Preview(showSystemUi = true)
 @Composable
 fun PreviewDaftarScreen() {
-    MaterialTheme {
-        DaftarScreen()
-    }
+    MaterialTheme { DaftarScreen() }
 }

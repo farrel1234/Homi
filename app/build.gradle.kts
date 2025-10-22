@@ -66,7 +66,8 @@ dependencies {
     // Navigation Compose (sekali cukup)
     implementation("androidx.navigation:navigation-compose:2.8.3")
 
-    // (opsional, kalau butuh)
+    implementation("androidx.navigation:navigation-compose:2.7.7")
+    implementation("com.google.accompanist:accompanist-navigation-animation:0.34.0")
     // implementation("androidx.navigation:navigation-runtime-ktx:2.8.3")
 
     // Test

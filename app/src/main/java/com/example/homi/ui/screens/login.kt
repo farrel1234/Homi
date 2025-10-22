@@ -1,6 +1,7 @@
 package com.example.homi.ui.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -33,12 +34,9 @@ fun LoginScreen(
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var passwordVisible by remember { mutableStateOf(false) }
+    var passwordVisible by remember { mutableStateOf(false) } // ⬅️ kontrol visibilitas password
 
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        // Background
+    Box(modifier = Modifier.fillMaxSize()) {
         Image(
             painter = painterResource(id = R.drawable.login),
             contentDescription = "Background",
@@ -64,6 +62,7 @@ fun LoginScreen(
                     .padding(bottom = 16.dp)
             )
 
+            // 🔹 Input Email
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
@@ -80,8 +79,9 @@ fun LoginScreen(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(Modifier.height(20.dp))
 
+            // 🔹 Input Password
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
@@ -98,11 +98,13 @@ fun LoginScreen(
                 modifier = Modifier.fillMaxWidth(),
                 visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
-                    val icon = if (passwordVisible) R.drawable.hide else R.drawable.hide
+                    // 🔹 Ganti ikon sesuai state
                     IconButton(onClick = { passwordVisible = !passwordVisible }) {
                         Icon(
-                            painter = painterResource(id = icon),
-                            contentDescription = if (passwordVisible) "Hide password" else "Show password",
+                            painter = painterResource(
+                                id = if (passwordVisible) R.drawable.show else R.drawable.hide
+                            ),
+                            contentDescription = if (passwordVisible) "Sembunyikan password" else "Tampilkan password",
                             modifier = Modifier.size(28.dp),
                             tint = Color.Gray
                         )
@@ -110,9 +112,9 @@ fun LoginScreen(
                 }
             )
 
-            Spacer(modifier = Modifier.height(6.dp))
+            Spacer(Modifier.height(6.dp))
 
-            // Forgot password
+            // 🔹 Lupa kata sandi
             Text(
                 text = "Lupa kata sandi?",
                 fontSize = 12.sp,
@@ -122,18 +124,20 @@ fun LoginScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(end = 4.dp)
+                    .clickable { onForgotPasswordClicked() }
             )
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(Modifier.height(20.dp))
 
-            // Button Konfirmasi
+            // 🔹 Tombol Konfirmasi (Login)
             Button(
-                onClick = {},
+                onClick = onLoginClicked,
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFA06B)),
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .width(270.dp)
                     .height(48.dp)
+                    .align(Alignment.CenterHorizontally)
             ) {
                 Text(
                     text = "Konfirmasi",
@@ -144,9 +148,9 @@ fun LoginScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(Modifier.height(16.dp))
 
-            // Register text
+            // 🔹 Teks "Belum punya akun?"
             Row(
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.fillMaxWidth()
@@ -157,14 +161,15 @@ fun LoginScreen(
                     fontFamily = poppins,
                     color = Color.Black
                 )
-                Spacer(modifier = Modifier.width(4.dp))
+                Spacer(Modifier.width(4.dp))
                 Text(
                     text = "Daftar",
                     fontSize = 10.sp,
                     fontFamily = poppins,
                     fontWeight = FontWeight.Bold,
                     color = Color.Blue,
-                    textDecoration = TextDecoration.Underline
+                    textDecoration = TextDecoration.Underline,
+                    modifier = Modifier.clickable { onRegisterClicked() } // ⬅️ aktif navigasi ke daftar
                 )
             }
         }

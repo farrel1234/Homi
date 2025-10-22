@@ -1,6 +1,7 @@
 package com.example.homi.ui.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -23,13 +24,11 @@ import com.example.homi.R
 fun TampilanAwalScreen3(
     onNextClicked: () -> Unit = {}
 ) {
-    // Font khusus
+    // Font
     val laBelleAurore = FontFamily(Font(R.font.la_belle_aurore))
-    val poppins = FontFamily(Font(R.font.poppins_semibold)) // font utama
+    val poppins = FontFamily(Font(R.font.poppins_semibold))
 
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
+    Box(modifier = Modifier.fillMaxSize()) {
         Image(
             painter = painterResource(id = R.drawable.loading_screen),
             contentDescription = "Background",
@@ -48,7 +47,7 @@ fun TampilanAwalScreen3(
                 text = "Menghubungkan Warga, Membangun Kebersamaan",
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
-                fontFamily = poppins,               // pakai Poppins
+                fontFamily = poppins,
                 color = Color.White,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
@@ -56,17 +55,22 @@ fun TampilanAwalScreen3(
 
             Spacer(modifier = Modifier.height(90.dp))
 
+            // Area klik kanan-bawah
             Box(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onNextClicked() }, // klik area kosong kanan-bawah
                 contentAlignment = Alignment.BottomEnd
             ) {
                 Text(
                     text = "Mulai",
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
-                    fontFamily = poppins,           // pakai Poppins juga
+                    fontFamily = poppins,
                     color = Color.White,
-                    modifier = Modifier.padding(end = 8.dp, bottom = 8.dp)
+                    modifier = Modifier
+                        .padding(end = 8.dp, bottom = 8.dp)
+                        .clickable { onNextClicked() } // teks juga bisa diklik
                 )
             }
         }
