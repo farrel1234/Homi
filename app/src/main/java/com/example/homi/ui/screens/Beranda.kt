@@ -16,13 +16,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHost
 import com.example.homi.R
 
 /* ===== Tokens ===== */
@@ -39,6 +39,7 @@ fun DashboardScreen(
     onPengajuan: (() -> Unit)? = null,
     onPengaduan: (() -> Unit)? = null,
     onPembayaran: (() -> Unit)? = null,
+    onDetailPengumumanClicked: (() -> Unit)? = null, // ⬅️ opsional
 ) {
     Box(Modifier.fillMaxSize()) {
 
@@ -65,27 +66,11 @@ fun DashboardScreen(
                 )
                 Spacer(Modifier.width(12.dp))
                 Column {
-                    Text(
-                        "Hai, Lily",
-                        fontFamily = PoppinsSemi,
-                        fontSize = 20.sp,
-                        color = Color.White
-                    )
-                    Text(
-                        "Selamat Datang di Homi",
-                        fontFamily = PoppinsSemi,
-                        fontSize = 20.sp,
-                        color = Color.White
-                    )
-                    Text(
-                        "Menghubungkan Warga, Membangun Kebersamaan",
-                        fontFamily = PoppinsReg,
-                        fontSize = 12.sp,
-                        color = Color.White
-                    )
+                    Text("Hai, Lily", fontFamily = PoppinsSemi, fontSize = 20.sp, color = Color.White)
+                    Text("Selamat Datang di Homi", fontFamily = PoppinsSemi, fontSize = 20.sp, color = Color.White)
+                    Text("Menghubungkan Warga, Membangun Kebersamaan", fontFamily = PoppinsReg, fontSize = 12.sp, color = Color.White)
                 }
                 Spacer(Modifier.weight(1f))
-                // titik tiga, notifikasi, dll → nanti di sini
             }
 
             /* ===== Container putih rounded ===== */
@@ -142,6 +127,9 @@ fun DashboardScreen(
                                 .align(Alignment.TopCenter)
                                 .padding(top = 10.dp)
                                 .fillMaxWidth()
+                                .clickable(enabled = onDetailPengumumanClicked != null) {
+                                    onDetailPengumumanClicked?.invoke() // ⬅️ navigate ke detail
+                                }
                         )
                         Text(
                             text = "Jumat/3 Sep 25\nArea Masjid\nSemua Warga\nPerumahan Hawai Garden",
@@ -157,27 +145,11 @@ fun DashboardScreen(
                     Spacer(Modifier.height(18.dp))
 
                     /* ===== 3 Tombol Menu ===== */
-                    MenuButton(
-                        icon = R.drawable.icon_pengajuan,
-                        title = "    Pengajuan Layanan",
-                        onClick = onPengajuan,
-                        iconSize = 48.dp
-                    )
+                    MenuButton(icon = R.drawable.icon_pengajuan, title = "    Pengajuan Layanan", onClick = onPengajuan, iconSize = 48.dp)
                     Spacer(Modifier.height(14.dp))
-                    MenuButton(
-                        icon = R.drawable.icon_pengaduan,
-                        title = "Pengaduan Warga",
-                        onClick = onPengaduan,
-                        iconSize = 48.dp
-                    )
+                    MenuButton(icon = R.drawable.icon_pengaduan, title = "Pengaduan Warga", onClick = onPengaduan, iconSize = 48.dp)
                     Spacer(Modifier.height(14.dp))
-                    MenuButton(
-                        icon = R.drawable.icon_pembayaran,
-                        title = "Pembayaran Iuran",
-                        onClick = onPembayaran,
-                        iconSize = 48.dp
-                    )
-
+                    MenuButton(icon = R.drawable.icon_pembayaran, title = "Pembayaran Iuran", onClick = onPembayaran, iconSize = 48.dp)
                     Spacer(Modifier.height(24.dp))
                 }
             }
@@ -186,7 +158,6 @@ fun DashboardScreen(
 }
 
 /* ===== Components ===== */
-
 @Composable
 private fun MenuButton(
     icon: Int,
@@ -205,18 +176,9 @@ private fun MenuButton(
             .padding(horizontal = 14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(
-            painter = painterResource(icon),
-            contentDescription = title,
-            modifier = Modifier.size(iconSize)
-        )
+        Image(painter = painterResource(icon), contentDescription = title, modifier = Modifier.size(iconSize))
         Spacer(Modifier.width(14.dp))
-        Text(
-            text = title,
-            fontFamily = PoppinsSemi,
-            color = Color.White,
-            fontSize = 16.sp
-        )
+        Text(text = title, fontFamily = PoppinsSemi, color = Color.White, fontSize = 16.sp)
     }
 }
 

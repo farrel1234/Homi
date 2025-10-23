@@ -4,7 +4,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,6 +34,7 @@ fun DetailPengumumanScreen() {
             .fillMaxSize()
             .background(Color(0xFFEFEFEF))
     ) {
+        // Header image
         Image(
             painter = painterResource(id = R.drawable.img_pengumuman),
             contentDescription = "Header Image",
@@ -40,12 +44,13 @@ fun DetailPengumumanScreen() {
                 .height(220.dp)
         )
 
-        Box(
+        // Konten putih rounded di bawah gambar
+        Card(
             modifier = Modifier
                 .fillMaxSize()
-                .offset(y = (-40).dp)
-                .clip(RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp))
-                .background(Color.White)
+                .offset(y = (-40).dp),
+            shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
+            colors = CardDefaults.cardColors(containerColor = Color.White)
         ) {
             Column(
                 modifier = Modifier
@@ -143,8 +148,6 @@ fun DetailPengumumanScreen() {
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun PreviewDetailPengumuman() {
-    MaterialTheme {
-        DetailPengumumanScreen()
-    }
+private fun PreviewDetailPengumuman() {
+    MaterialTheme { DetailPengumumanScreen() }
 }

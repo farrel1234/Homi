@@ -4,11 +4,27 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.runtime.Composable
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import com.example.homi.ui.screens.*
+
+// Screens
+import com.example.homi.ui.screens.SplashScreen
+import com.example.homi.ui.screens.TampilanAwalScreen
+import com.example.homi.ui.screens.TampilanAwalScreen2
+import com.example.homi.ui.screens.TampilanAwalScreen3
+import com.example.homi.ui.screens.LoginScreen
+import com.example.homi.ui.screens.DaftarScreen
+import com.example.homi.ui.screens.KonfirmasiDaftarScreen
+import com.example.homi.ui.screens.DashboardScreen
+import com.example.homi.ui.screens.DetailPengumumanScreen
+
+// ⬇️ pakai Routes dari file Routes.kt
+// (file ini: app/src/main/java/com/example/homi/navigation/Routes.kt)
+import com.example.homi.navigation.Routes
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -19,7 +35,7 @@ fun AppNavHostAnimated() {
         navController = navController,
         startDestination = Routes.Splash
     ) {
-        // 🔹 Splash → TampilanAwal
+        // Splash
         composable(
             route = Routes.Splash,
             exitTransition = { fadeOut(tween(250)) },
@@ -34,7 +50,7 @@ fun AppNavHostAnimated() {
             )
         }
 
-        // 🔹 TampilanAwal → TampilanAwal2
+        // TampilanAwal → 2
         composable(
             route = Routes.TampilanAwal,
             enterTransition = { fadeIn(tween(300)) },
@@ -50,7 +66,7 @@ fun AppNavHostAnimated() {
             )
         }
 
-        // 🔹 TampilanAwal2 → TampilanAwal3
+        // 2 → 3
         composable(
             route = Routes.TampilanAwal2,
             enterTransition = { fadeIn(tween(300)) },
@@ -58,7 +74,6 @@ fun AppNavHostAnimated() {
         ) {
             TampilanAwalScreen2(
                 onNextClicked = {
-                    // ⬅️ Lanjut ke TampilanAwal3
                     navController.navigate(Routes.TampilanAwal3) {
                         launchSingleTop = true
                         popUpTo(Routes.TampilanAwal2) { inclusive = true }
@@ -67,7 +82,7 @@ fun AppNavHostAnimated() {
             )
         }
 
-        // 🔹 TampilanAwal3 → Login
+        // 3 → Login
         composable(
             route = Routes.TampilanAwal3,
             enterTransition = { fadeIn(tween(300)) },
@@ -83,20 +98,21 @@ fun AppNavHostAnimated() {
             )
         }
 
-        // 🔹 Login
-        composable(
-            route = Routes.Login,
-            enterTransition = { fadeIn(tween(350)) },
-            exitTransition = { fadeOut(tween(250)) }
-        ) {
+        // Login
+        composable(Routes.Login) {
             LoginScreen(
-                onLoginClicked = { /* TODO: navController.navigate("dashboard") */ },
+                onLoginClicked = {
+                    navController.navigate(Routes.Beranda) {
+                        popUpTo(Routes.Login) { inclusive = true }
+                        launchSingleTop = true
+                    }
+                },
                 onRegisterClicked = { navController.navigate(Routes.Daftar) },
                 onForgotPasswordClicked = { /* TODO */ }
             )
         }
 
-        // 🔹 Daftar
+        // Daftar
         composable(
             route = Routes.Daftar,
             enterTransition = { fadeIn(tween(250)) },
@@ -113,13 +129,54 @@ fun AppNavHostAnimated() {
             )
         }
 
-        // 🔹 Konfirmasi OTP
+        // Konfirmasi OTP
         composable(
             route = Routes.Konfirmasi,
             enterTransition = { fadeIn(tween(250)) },
             exitTransition = { fadeOut(tween(200)) }
         ) {
             KonfirmasiDaftarScreen(navController = navController)
+        }
+
+        // Beranda / Dashboard
+        composable(
+            route = Routes.Beranda,
+            enterTransition = { fadeIn(tween(220)) },
+            exitTransition = { fadeOut(tween(180)) }
+        ) {
+            DashboardScreen(
+                onPengajuan = { /* ... */ },
+                onPengaduan = { /* ... */ },
+                onPembayaran = { /* ... */ },
+                onDetailPengumumanClicked = {
+                    navController.navigate(Routes.DetailPengumuman)
+                }
+            )
+        }
+
+        // Detail Pengumuman (slide + fade)
+        composable(
+            route = Routes.DetailPengumuman,
+            enterTransition = {
+                slideInVertically(
+                    animationSpec = tween(320),
+                    initialOffsetY = { fullHeight -> fullHeight / 3 }
+                ) + fadeIn(animationSpec = tween(320))
+            },
+            exitTransition = {
+                fadeOut(animationSpec = tween(200))
+            },
+            popEnterTransition = {
+                fadeIn(animationSpec = tween(220))
+            },
+            popExitTransition = {
+                slideOutVertically(
+                    animationSpec = tween(260),
+                    targetOffsetY = { fullHeight -> fullHeight / 3 }
+                ) + fadeOut(animationSpec = tween(260))
+            }
+        ) {
+            DetailPengumumanScreen()
         }
     }
 }

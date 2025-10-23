@@ -8,4 +8,6 @@ object Routes {
     const val Login = "login"
     const val Daftar = "daftar"
     const val Konfirmasi = "konfirmasi"
+    const val Beranda = "beranda"
+    const val DetailPengumuman = "detail_pengumuman"
 }

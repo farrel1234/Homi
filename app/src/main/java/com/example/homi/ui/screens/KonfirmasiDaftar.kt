@@ -5,12 +5,17 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -18,20 +23,29 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.homi.R
 import com.example.homi.ui.components.OtpExpiredPopup
 import com.example.homi.ui.components.OtpSuccessPopup
 import kotlinx.coroutines.delay
 
-// Opsional: satukan route di satu tempat
+// ====================
+// ROUTE DEFINITIONS
+// ====================
 object Routes {
     const val Login = "login"
     const val Konfirmasi = "konfirmasi"
+    const val Beranda = "beranda"
 }
 
+// ====================
+// MAIN SCREEN
+// ====================
 @Composable
 fun KonfirmasiDaftarScreen(
     navController: NavController
@@ -41,7 +55,7 @@ fun KonfirmasiDaftarScreen(
 
     var otpCode by remember { mutableStateOf("") }
 
-    // Animasi amplop berdenyut
+    // 🔹 Animasi amplop berdenyut
     val infiniteTransition = rememberInfiniteTransition()
     val scaleAnim by infiniteTransition.animateFloat(
         initialValue = 1f,
@@ -52,7 +66,7 @@ fun KonfirmasiDaftarScreen(
         )
     )
 
-    // ===== TIMER RESEND =====
+    // 🔹 Countdown kirim ulang
     var remainingTime by remember { mutableStateOf(30) }
     var isCounting by remember { mutableStateOf(true) }
 
@@ -66,26 +80,24 @@ fun KonfirmasiDaftarScreen(
         }
     }
 
-    // ===== POPUPS =====
+    // 🔹 Popup state
     var showExpiredPopup by remember { mutableStateOf(false) }
     var showSuccessPopup by remember { mutableStateOf(false) }
 
-    // Jika timer habis → popup expired
+    // Popup otomatis saat waktu habis
     LaunchedEffect(remainingTime) {
         if (remainingTime == 0) showExpiredPopup = true
     }
 
-    // Verifikasi otomatis saat 6 digit terisi
+    // 🔹 Verifikasi otomatis (contoh: 123456 benar)
     var isVerifying by remember { mutableStateOf(false) }
     var hasVerified by remember { mutableStateOf(false) }
 
     LaunchedEffect(otpCode) {
         if (otpCode.length == 6 && !isVerifying && !hasVerified) {
             isVerifying = true
-            // TODO: ganti dgn API verifikasi backend kamu
+            delay(400) // simulasi API
             val ok = otpCode == "123456"
-            delay(400) // simulasi network
-
             if (ok) showSuccessPopup = true else showExpiredPopup = true
             hasVerified = true
             isVerifying = false
@@ -94,12 +106,15 @@ fun KonfirmasiDaftarScreen(
         }
     }
 
-    // Format mm.ss
     val minutes = remainingTime / 60
     val seconds = remainingTime % 60
     val timeText = String.format("%02d.%02d", minutes, seconds)
 
+    // ====================
+    // UI
+    // ====================
     Box(Modifier.fillMaxSize()) {
+        // Background
         Image(
             painter = painterResource(id = R.drawable.konfirmasi_pendaftaran),
             contentDescription = "Background Konfirmasi",
@@ -107,6 +122,7 @@ fun KonfirmasiDaftarScreen(
             contentScale = ContentScale.Crop
         )
 
+        // Konten utama
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -150,7 +166,7 @@ fun KonfirmasiDaftarScreen(
 
                 OutlinedTextField(
                     value = otpCode,
-                    onValueChange = { otpCode = it.take(6) }, // batasi 6 digit
+                    onValueChange = { otpCode = it.take(6) },
                     singleLine = true,
                     shape = RoundedCornerShape(8.dp),
                     colors = OutlinedTextFieldDefaults.colors(
@@ -181,7 +197,6 @@ fun KonfirmasiDaftarScreen(
 
                 Spacer(Modifier.height(38.dp))
 
-                // Countdown / Resend
                 Text(
                     text = if (isCounting) "Kirim Ulang Kode : $timeText" else "Kirim Ulang Kode",
                     fontFamily = poppins,
@@ -194,7 +209,6 @@ fun KonfirmasiDaftarScreen(
                         .align(Alignment.CenterHorizontally)
                         .padding(end = 2.dp)
                         .clickable(enabled = !isCounting) {
-                            // reset dan panggil resend OTP
                             remainingTime = 30
                             isCounting = true
                             // TODO: panggil API resend OTP di sini
@@ -203,7 +217,31 @@ fun KonfirmasiDaftarScreen(
             }
         }
 
-        // Popup Salah/Kedaluwarsa (auto-close 2 detik)
+        // === Ikon Panah tanpa overlay ===
+        Box(
+            modifier = Modifier
+                .fillMaxSize(),
+            contentAlignment = Alignment.BottomCenter
+        ) {
+            Icon(
+                imageVector = Icons.Filled.ArrowForward,
+                contentDescription = "Lanjut ke Beranda",
+                tint = Color.White,
+                modifier = Modifier
+                    .offset(x = 9.dp, y = (-195).dp) // ⬅️ geser kanan 12dp, naik 195dp
+                    .size(49.dp)
+                    .clickable {
+                        navController.navigate(Routes.Beranda) {
+                            popUpTo(Routes.Konfirmasi) { inclusive = true }
+                            launchSingleTop = true
+                        }
+                    }
+            )
+        }
+
+        // ====================
+        // Popups (auto-close 2 detik)
+        // ====================
         if (showExpiredPopup) {
             OtpExpiredPopup()
             LaunchedEffect(Unit) {
@@ -212,18 +250,28 @@ fun KonfirmasiDaftarScreen(
             }
         }
 
-        // Popup Sukses (auto-close 2 detik lalu NAVIGASI)
         if (showSuccessPopup) {
             OtpSuccessPopup()
             LaunchedEffect(Unit) {
                 delay(2000)
                 showSuccessPopup = false
-                // ⮕ Arahkan ke Login dan bersihkan back stack hingga Konfirmasi
                 navController.navigate(Routes.Login) {
                     popUpTo(Routes.Konfirmasi) { inclusive = true }
                     launchSingleTop = true
                 }
             }
         }
+    }
+}
+
+// ====================
+// PREVIEW
+// ====================
+@Preview(showSystemUi = true)
+@Composable
+fun PreviewKonfirmasiDaftarScreen() {
+    val nav = rememberNavController()
+    MaterialTheme {
+        KonfirmasiDaftarScreen(navController = nav)
     }
 }
