@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit
 
 
 object RetrofitClient {
-    private const val BASE_URL = "http://10.170.19.176:8080/homi-api/api/"
+    private const val BASE_URL = "http:// 10.146.106.175:8080/homi-api/api/"
 
     val instance: HomiApi by lazy {
         val retrofit = Retrofit.Builder()
