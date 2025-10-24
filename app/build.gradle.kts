@@ -50,6 +50,21 @@ dependencies {
     // ✅ Compose BOM (SATU kali saja)
     implementation(platform(libs.androidx.compose.bom))
 
+
+    // Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+
+    // Gson Converter untuk JSON
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // OkHttp (opsional tapi direkomendasikan)
+    implementation("com.squareup.okhttp3:okhttp:4.11.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
+
+    // Gson library (untuk @SerializedName)
+    implementation("com.google.code.gson:gson:2.10.1")
+
+
     // Compose UI
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
