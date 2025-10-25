@@ -10,16 +10,8 @@ import java.util.concurrent.TimeUnit
 
 
 object RetrofitClient {
-    private const val BASE_URL = "http:// 10.146.106.175:8080/homi-api/api/"
-
-    val instance: HomiApi by lazy {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        retrofit.create(HomiApi::class.java)
-    }
+    private const val BASE_URL = "http://192.168.100.4:8080/homi-api/api/"
+    
 
     fun create(context: Context): HomiApi {
         val tokenManager = TokenManager(context)

@@ -11,36 +11,9 @@ import com.example.homi.model.LoginRequest
 import com.example.homi.model.AuthResponse
 
 
-
-// ==== MODEL RESPONSE ====
-
-data class UserData(
-    val id: Int,
-    @SerializedName("role_id") val roleId: Int,
-    val username: String,
-    val email: String,
-    @SerializedName("full_name") val fullName: String,
-    val phone: String,
-    @SerializedName("is_active") val isActive: Int
-)
-
-data class AuthResponse(
-    val accessToken: String,
-    val refreshToken: String,
-    val user: UserData
-)
-
-data class LoginRequest(
-    val identifier: String,
-    val password: String
-)
-
-
 // ==== API INTERFACE ====
 
 interface HomiApi {
-
-
 
     // Tambahkan header agar request dikirim sebagai JSON
     @Headers("Content-Type: application/json", "Accept: application/json")

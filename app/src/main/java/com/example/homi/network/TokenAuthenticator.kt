@@ -36,8 +36,9 @@ class TokenAuthenticator(
         val newAccess = newTokens?.accessToken ?: return null
 
         // Simpan token baru
-        tokenManager.saveAccessToken(newAccess)
-        newTokens.refreshToken?.let { tokenManager.saveRefreshToken(it) }
+        tokenManager.saveAccessToken(newTokens.accessToken)
+        tokenManager.saveRefreshToken(newTokens.refreshToken)
+
 
         // Ulangi request sebelumnya dengan Authorization baru
         return response.request.newBuilder()

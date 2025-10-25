@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,19 +23,30 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.homi.R
+import com.example.homi.ui.AuthViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
     onLoginClicked: () -> Unit = {},
     onRegisterClicked: () -> Unit = {},
-    onForgotPasswordClicked: () -> Unit = {}
+    onForgotPasswordClicked: () -> Unit = {},
+    // DEFAULT untuk preview:
+    viewModel: AuthViewModel = previewAuthViewModel(),
+    navToDashboard: () -> Unit = {}
 ) {
     val poppins = FontFamily(Font(R.font.poppins_semibold))
 
     var email by remember { mutableStateOf("") }
+    val state by viewModel.state.collectAsState()
+    var identifier by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) } // ⬅️ kontrol visibilitas password
+
+    LaunchedEffect(state.loggedIn) {        // jika tidak ada loggedIn, ganti ke state.user != null
+        if (state.loggedIn) navToDashboard()
+    }
+
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
@@ -64,8 +76,8 @@ fun LoginScreen(
 
             // 🔹 Input Email
             OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
+                value = identifier,
+                onValueChange = { identifier = it },
                 label = { Text("Nama Pengguna / Email", fontFamily = poppins) },
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp),
@@ -131,7 +143,8 @@ fun LoginScreen(
 
             // 🔹 Tombol Konfirmasi (Login)
             Button(
-                onClick = onLoginClicked,
+                onClick = { viewModel.login(identifier.trim(), password) },
+                enabled = !state.loading,
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFA06B)),
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier
@@ -177,9 +190,66 @@ fun LoginScreen(
 }
 
 @Preview(showSystemUi = true)
+
+
 @Composable
-fun PreviewLoginScreen() {
-    MaterialTheme {
-        LoginScreen()
+private fun previewAuthViewModel(): AuthViewModel {
+    // butuh context untuk TokenManager
+    val ctx = androidx.compose.ui.platform.LocalContext.current
+
+    // cache di composition agar tidak dibuat ulang saat recomposition
+    val tokenMgr = remember { com.example.homi.util.TokenManager(ctx) }
+
+    // samakan NAMA PARAMETER dengan interface HomiApi (pakai `request`)
+    val fakeApi = remember {
+        object : com.example.homi.network.HomiApi {
+            override suspend fun login(
+                request: com.example.homi.model.LoginRequest
+            ): retrofit2.Response<com.example.homi.model.AuthResponse> =
+                retrofit2.Response.success(
+                    com.example.homi.model.AuthResponse(
+                        accessToken = "",
+                        refreshToken = "",
+                        user = null
+                    )
+                )
+
+            override suspend fun register(
+                request: com.example.homi.model.RegisterRequest
+            ): retrofit2.Response<com.example.homi.model.AuthResponse> =
+                retrofit2.Response.success(
+                    com.example.homi.model.AuthResponse(
+                        accessToken = "",
+                        refreshToken = "",
+                        user = null
+                    )
+                )
+
+            override suspend fun refreshToken(
+                refreshAuthHeader: String
+            ): retrofit2.Response<com.example.homi.model.AuthResponse> =
+                retrofit2.Response.success(
+                    com.example.homi.model.AuthResponse(
+                        accessToken = "",
+                        refreshToken = "",
+                        user = null
+                    )
+                )
+
+            override suspend fun logout(
+            ): retrofit2.Response<com.example.homi.model.AuthResponse> =
+                retrofit2.Response.success(
+                    com.example.homi.model.AuthResponse(
+                        accessToken = "",
+                        refreshToken = "",
+                        user = null
+                    )
+                )
+        }
     }
+
+    val repo = remember { com.example.homi.repository.AuthRepository(fakeApi, tokenMgr) }
+
+    // <- ini kunci untuk hilangkan lint “Constructing a view model in a composable”
+    return remember { com.example.homi.ui.AuthViewModel(repo) }
 }

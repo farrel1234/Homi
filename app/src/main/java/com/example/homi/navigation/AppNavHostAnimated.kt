@@ -7,6 +7,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.runtime.Composable
+import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -21,15 +22,23 @@ import com.example.homi.ui.screens.DaftarScreen
 import com.example.homi.ui.screens.KonfirmasiDaftarScreen
 import com.example.homi.ui.screens.DashboardScreen
 import com.example.homi.ui.screens.DetailPengumumanScreen
+import com.example.homi.ui.AuthViewModel
+import com.example.homi.util.TokenManager
 
 // ⬇️ pakai Routes dari file Routes.kt
 // (file ini: app/src/main/java/com/example/homi/navigation/Routes.kt)
 import com.example.homi.navigation.Routes
 
+
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun AppNavHostAnimated() {
+fun AppNavHostAnimated(
+    tokenManager: TokenManager,
+    authViewModel: AuthViewModel
+) {
     val navController = rememberAnimatedNavController()
+    val start = if (!tokenManager.getAccessToken().isNullOrBlank())
+        Routes.Beranda else Routes.Login
 
     AnimatedNavHost(
         navController = navController,
@@ -101,14 +110,16 @@ fun AppNavHostAnimated() {
         // Login
         composable(Routes.Login) {
             LoginScreen(
-                onLoginClicked = {
+                onLoginClicked = { /* boleh kosong sekarang */ },
+                onRegisterClicked = { navController.navigate(Routes.Daftar) },
+                onForgotPasswordClicked = { /* ke layar lupa password jika ada */ },
+                viewModel = authViewModel, // <-- KIRIM ViewModel yang dibuat di MainActivity
+                navToDashboard = {
                     navController.navigate(Routes.Beranda) {
                         popUpTo(Routes.Login) { inclusive = true }
                         launchSingleTop = true
                     }
-                },
-                onRegisterClicked = { navController.navigate(Routes.Daftar) },
-                onForgotPasswordClicked = { /* TODO */ }
+                }
             )
         }
 
