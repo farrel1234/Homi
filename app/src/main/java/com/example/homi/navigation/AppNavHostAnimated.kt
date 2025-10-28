@@ -7,7 +7,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.runtime.Composable
-import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -22,13 +21,9 @@ import com.example.homi.ui.screens.DaftarScreen
 import com.example.homi.ui.screens.KonfirmasiDaftarScreen
 import com.example.homi.ui.screens.DashboardScreen
 import com.example.homi.ui.screens.DetailPengumumanScreen
+import com.example.homi.ui.screens.PembayaranIuranScreen
 import com.example.homi.ui.AuthViewModel
 import com.example.homi.util.TokenManager
-
-// ⬇️ pakai Routes dari file Routes.kt
-// (file ini: app/src/main/java/com/example/homi/navigation/Routes.kt)
-import com.example.homi.navigation.Routes
-
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -37,14 +32,12 @@ fun AppNavHostAnimated(
     authViewModel: AuthViewModel
 ) {
     val navController = rememberAnimatedNavController()
-    val start = if (!tokenManager.getAccessToken().isNullOrBlank())
-        Routes.Beranda else Routes.Login
 
     AnimatedNavHost(
         navController = navController,
         startDestination = Routes.Splash
     ) {
-        // Splash
+        // Splash → TampilanAwal
         composable(
             route = Routes.Splash,
             exitTransition = { fadeOut(tween(250)) },
@@ -59,7 +52,7 @@ fun AppNavHostAnimated(
             )
         }
 
-        // TampilanAwal → 2
+        // TampilanAwal → TampilanAwal2
         composable(
             route = Routes.TampilanAwal,
             enterTransition = { fadeIn(tween(300)) },
@@ -75,7 +68,7 @@ fun AppNavHostAnimated(
             )
         }
 
-        // 2 → 3
+        // TampilanAwal2 → TampilanAwal3
         composable(
             route = Routes.TampilanAwal2,
             enterTransition = { fadeIn(tween(300)) },
@@ -91,7 +84,7 @@ fun AppNavHostAnimated(
             )
         }
 
-        // 3 → Login
+        // TampilanAwal3 → Login
         composable(
             route = Routes.TampilanAwal3,
             enterTransition = { fadeIn(tween(300)) },
@@ -110,10 +103,10 @@ fun AppNavHostAnimated(
         // Login
         composable(Routes.Login) {
             LoginScreen(
-                onLoginClicked = { /* boleh kosong sekarang */ },
+                onLoginClicked = { /* handled inside LoginScreen via viewModel */ },
                 onRegisterClicked = { navController.navigate(Routes.Daftar) },
-                onForgotPasswordClicked = { /* ke layar lupa password jika ada */ },
-                viewModel = authViewModel, // <-- KIRIM ViewModel yang dibuat di MainActivity
+                onForgotPasswordClicked = { /* TODO: route to forgot screen if any */ },
+                viewModel = authViewModel,
                 navToDashboard = {
                     navController.navigate(Routes.Beranda) {
                         popUpTo(Routes.Login) { inclusive = true }
@@ -156,9 +149,11 @@ fun AppNavHostAnimated(
             exitTransition = { fadeOut(tween(180)) }
         ) {
             DashboardScreen(
-                onPengajuan = { /* ... */ },
-                onPengaduan = { /* ... */ },
-                onPembayaran = { /* ... */ },
+                onPengajuan = { /* TODO */ },
+                onPengaduan = { /* TODO */ },
+                onPembayaran = {                       // ⬅️ ke Pembayaran
+                    navController.navigate(Routes.Pembayaran)
+                },
                 onDetailPengumumanClicked = {
                     navController.navigate(Routes.DetailPengumuman)
                 }
@@ -174,12 +169,8 @@ fun AppNavHostAnimated(
                     initialOffsetY = { fullHeight -> fullHeight / 3 }
                 ) + fadeIn(animationSpec = tween(320))
             },
-            exitTransition = {
-                fadeOut(animationSpec = tween(200))
-            },
-            popEnterTransition = {
-                fadeIn(animationSpec = tween(220))
-            },
+            exitTransition = { fadeOut(animationSpec = tween(200)) },
+            popEnterTransition = { fadeIn(animationSpec = tween(220)) },
             popExitTransition = {
                 slideOutVertically(
                     animationSpec = tween(260),
@@ -188,6 +179,16 @@ fun AppNavHostAnimated(
             }
         ) {
             DetailPengumumanScreen()
+        }
+
+        composable(
+            route = Routes.Pembayaran,
+            enterTransition = { fadeIn(tween(220)) },
+            exitTransition = { fadeOut(tween(180)) }
+        ) {
+            PembayaranIuranScreen(
+                onBack = { navController.popBackStack() }
+            )
         }
     }
 }

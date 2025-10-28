@@ -29,7 +29,6 @@ import com.example.homi.R
 
 /* ===== TOKENS ===== */
 private val BlueMain    = Color(0xFF2F7FA3)
-private val BlueBorder  = Color(0xFF2F7FA3)
 private val BlueText    = Color(0xFF2F7FA3)
 private val ChipBg      = Color(0xFFE6F3F8)
 private val TextDark    = Color(0xFF0E0E0E)
@@ -83,7 +82,6 @@ fun PembayaranIuranScreen(
             )
             Spacer(Modifier.width(40.dp))
         }
-
         Text(
             text = "Segera membayar tagihan iuran yang tersedia",
             fontFamily = PoppinsReg,
@@ -161,7 +159,6 @@ fun PembayaranIuranScreen(
                             .fillMaxWidth()
                             .padding(top = 8.dp, bottom = 6.dp)
                     ) {
-                        // garis dengan judul di tengah (seperti tab "Rincian Pembayaran")
                         Box(Modifier.fillMaxWidth()) {
                             Divider(color = LineGray, thickness = 1.dp, modifier = Modifier.align(Alignment.Center))
                             Text(
@@ -191,7 +188,6 @@ fun PembayaranIuranScreen(
 
                 /* ===== QR AREA ===== */
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    // ikon kecil di atas tulisan QRIS (opsional)
                     Image(
                         painter = painterResource(id = R.drawable.ic_qr),
                         contentDescription = null,
@@ -220,13 +216,10 @@ fun PembayaranIuranScreen(
                 }
 
                 Spacer(Modifier.height(16.dp))
-                // (Sesuai permintaan) Tombol refresh DIHAPUS
             }
         }
     }
 }
-
-/* ====== Subcomponents ====== */
 
 @Composable
 private fun RincianRow(
@@ -259,7 +252,6 @@ private fun RincianRow(
     }
 }
 
-/* ===== PREVIEW ===== */
 @Preview(showBackground = true, showSystemUi = true, backgroundColor = 0xFFFFFFFF)
 @Composable
 private fun PreviewPembayaran() {

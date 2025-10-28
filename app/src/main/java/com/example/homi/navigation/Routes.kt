@@ -10,4 +10,6 @@ object Routes {
     const val Konfirmasi = "konfirmasi"
     const val Beranda = "beranda"
     const val DetailPengumuman = "detail_pengumuman"
+
+    const val Pembayaran = "pembayaran"
 }

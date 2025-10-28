@@ -39,18 +39,17 @@ fun DashboardScreen(
     onPengajuan: (() -> Unit)? = null,
     onPengaduan: (() -> Unit)? = null,
     onPembayaran: (() -> Unit)? = null,
-    onDetailPengumumanClicked: (() -> Unit)? = null, // ⬅️ opsional
+    onDetailPengumumanClicked: (() -> Unit)? = null,
 ) {
     Box(Modifier.fillMaxSize()) {
 
-        /* Background biru utama */
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(BlueMain)
                 .statusBarsPadding()
         ) {
-            /* ===== Header ===== */
+            // Header
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -73,7 +72,7 @@ fun DashboardScreen(
                 Spacer(Modifier.weight(1f))
             }
 
-            /* ===== Container putih rounded ===== */
+            // Container putih
             Spacer(Modifier.height(10.dp))
             Card(
                 modifier = Modifier.fillMaxSize(),
@@ -85,8 +84,6 @@ fun DashboardScreen(
                         .fillMaxSize()
                         .padding(horizontal = 16.dp, vertical = 18.dp)
                 ) {
-
-                    /* Judul “Pengumuman” */
                     Text(
                         text = "Pengumuman",
                         fontFamily = PoppinsSemi,
@@ -98,7 +95,7 @@ fun DashboardScreen(
 
                     Spacer(Modifier.height(10.dp))
 
-                    /* Kartu Pengumuman */
+                    // Kartu Pengumuman
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -128,7 +125,7 @@ fun DashboardScreen(
                                 .padding(top = 10.dp)
                                 .fillMaxWidth()
                                 .clickable(enabled = onDetailPengumumanClicked != null) {
-                                    onDetailPengumumanClicked?.invoke() // ⬅️ navigate ke detail
+                                    onDetailPengumumanClicked?.invoke()
                                 }
                         )
                         Text(
@@ -144,7 +141,7 @@ fun DashboardScreen(
 
                     Spacer(Modifier.height(18.dp))
 
-                    /* ===== 3 Tombol Menu ===== */
+                    // 3 Tombol Menu
                     MenuButton(icon = R.drawable.icon_pengajuan, title = "    Pengajuan Layanan", onClick = onPengajuan, iconSize = 48.dp)
                     Spacer(Modifier.height(14.dp))
                     MenuButton(icon = R.drawable.icon_pengaduan, title = "Pengaduan Warga", onClick = onPengaduan, iconSize = 48.dp)
@@ -157,7 +154,6 @@ fun DashboardScreen(
     }
 }
 
-/* ===== Components ===== */
 @Composable
 private fun MenuButton(
     icon: Int,
@@ -182,7 +178,6 @@ private fun MenuButton(
     }
 }
 
-/* ===== Preview ===== */
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun PreviewDashboardBaru() {
