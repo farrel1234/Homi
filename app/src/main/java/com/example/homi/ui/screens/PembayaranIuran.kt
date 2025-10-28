@@ -66,8 +66,13 @@ fun PembayaranIuranScreen(
             IconButton(
                 onClick = { onBack?.invoke() },
                 colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
-            ) { Icon(painterResource(backIcon), contentDescription = "Kembali") }
-
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.panahkembali),
+                    contentDescription = "Kembali",
+                    modifier = Modifier.size(32.dp)
+                )
+            }
             Text(
                 text = "Pembayaran",
                 fontFamily = PoppinsSemi,
