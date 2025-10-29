@@ -91,13 +91,8 @@ fun PembayaranIuranScreen(
             IconButton(
                 onClick = { onBack?.invoke() },
                 colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.panahkembali),
-                    contentDescription = "Kembali",
-                    modifier = Modifier.size(32.dp)
-                )
-            }
+            ) { Icon(painterResource(backIcon), contentDescription = "Kembali") }
+
             Text(
                 text = "Pembayaran",
                 fontFamily = PoppinsSemi,
@@ -108,6 +103,7 @@ fun PembayaranIuranScreen(
             )
             Spacer(Modifier.width(40.dp))
         }
+
         Text(
             text = "Segera membayar tagihan iuran yang tersedia",
             fontFamily = PoppinsReg,
@@ -352,11 +348,8 @@ fun PembayaranIuranScreen(
     }
 }
 
-<<<<<<< HEAD
-=======
 /* ===== Subcomponents ===== */
 
->>>>>>> bea0ae5 (tambahan sisa halaman)
 @Composable
 private fun RincianRow(
     left: String,
@@ -388,8 +381,6 @@ private fun RincianRow(
     }
 }
 
-<<<<<<< HEAD
-=======
 /* ===== Utils: Uri -> Multipart (pakai di Repository/VM) ===== */
 fun uriToMultipart(
     resolver: ContentResolver,
@@ -424,7 +415,6 @@ private fun guessDisplayName(resolver: ContentResolver, uri: Uri): String? {
 }
 
 /* ===== Preview ===== */
->>>>>>> bea0ae5 (tambahan sisa halaman)
 @Preview(showBackground = true, showSystemUi = true, backgroundColor = 0xFFFFFFFF)
 @Composable
 private fun PreviewPembayaran() {
