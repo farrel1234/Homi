@@ -1,5 +1,10 @@
 package com.example.homi.ui.screens
 
+import android.content.ContentResolver
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
@@ -25,7 +30,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.homi.R
+import java.io.ByteArrayOutputStream
+import java.io.InputStream
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 
 /* ===== TOKENS ===== */
 private val BlueMain    = Color(0xFF2F7FA3)
@@ -46,8 +58,22 @@ fun PembayaranIuranScreen(
     @DrawableRes backIcon: Int = R.drawable.panah,
     @DrawableRes qrIcon: Int = R.drawable.qr_code,
     onBack: (() -> Unit)? = null,
+    // jika mau langsung serahkan ke ViewModel:
+    onUploadBukti: ((uri: Uri) -> Unit)? = null
 ) {
     var rincianExpanded by remember { mutableStateOf(true) }
+
+    // ====== STATE UPLOAD ======
+    var buktiUri by remember { mutableStateOf<Uri?>(null) }
+    var isUploading by remember { mutableStateOf(false) }
+    var uploadMessage by remember { mutableStateOf<String?>(null) }
+
+    // Universal Photo Picker (auto fallback di Android < 13)
+    val picker = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia()
+    ) { uri ->
+        uri?.let { buktiUri = it }
+    }
 
     Column(
         modifier = Modifier
@@ -116,7 +142,6 @@ fun PembayaranIuranScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // Nominal
                     Row(
                         modifier = Modifier
                             .clip(RoundedCornerShape(18.dp))
@@ -132,7 +157,6 @@ fun PembayaranIuranScreen(
                         )
                     }
 
-                    // Toggle Rincian
                     TextButton(
                         onClick = { rincianExpanded = !rincianExpanded },
                         contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp)
@@ -148,7 +172,7 @@ fun PembayaranIuranScreen(
 
                 Divider(color = LineGray, thickness = 1.dp)
 
-                /* ===== RINCIAN (expand/collapse) ===== */
+                /* ===== RINCIAN ===== */
                 AnimatedVisibility(
                     visible = rincianExpanded,
                     enter = fadeIn() + expandVertically(),
@@ -215,12 +239,124 @@ fun PembayaranIuranScreen(
                     )
                 }
 
+                /* ===== UPLOAD BUKTI ===== */
+                Spacer(Modifier.height(22.dp))
+                Divider(color = LineGray, thickness = 1.dp)
+                Spacer(Modifier.height(12.dp))
+
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally  // ⬅️ ini bikin semua isi di tengah
+                ) {
+                    Text(
+                        text = "Upload Bukti Pembayaran",
+                        fontFamily = PoppinsSemi,
+                        fontSize = 14.sp,
+                        color = TextDark,
+                        textAlign = TextAlign.Center   // ⬅️ teks judul juga di tengah
+                    )
+
+                    Spacer(Modifier.height(10.dp))
+
+                    // Tombol pilih / ganti gambar
+                    Row(
+                        horizontalArrangement = Arrangement.Center,     // ⬅️ tombol rata tengah
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        OutlinedButton(
+                            onClick = {
+                                picker.launch(
+                                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                                )
+                            },
+                            border = ButtonDefaults.outlinedButtonBorder.copy(width = 1.dp),
+                        ) {
+                            Text(
+                                text = if (buktiUri == null) "Pilih Gambar" else "Ganti Gambar",
+                                fontFamily = PoppinsReg
+                            )
+                        }
+
+                        if (buktiUri != null) {
+                            Spacer(Modifier.width(8.dp))
+                            TextButton(onClick = { buktiUri = null }) {
+                                Text("Hapus", fontFamily = PoppinsReg, color = Color(0xFFDC2626))
+                            }
+                        }
+                    }
+
+                    // Preview gambar
+                    AnimatedVisibility(visible = buktiUri != null) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Spacer(Modifier.height(10.dp))
+                            AsyncImage(
+                                model = buktiUri,
+                                contentDescription = "Preview Bukti",
+                                modifier = Modifier
+                                    .size(width = 260.dp, height = 180.dp)   // ⬅️ ukuran biar proporsional tengah
+                                    .clip(RoundedCornerShape(14.dp)),
+                                contentScale = ContentScale.Crop
+                            )
+                        }
+                    }
+
+                    uploadMessage?.let { msg ->
+                        Spacer(Modifier.height(8.dp))
+                        Text(
+                            text = msg,
+                            fontFamily = PoppinsReg,
+                            fontSize = 12.sp,
+                            color = HintGray,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+
+                    Spacer(Modifier.height(14.dp))
+
+                    Button(
+                        onClick = {
+                            val target = buktiUri ?: return@Button
+                            if (onUploadBukti != null) {
+                                isUploading = true
+                                uploadMessage = "Mengunggah bukti…"
+                                onUploadBukti.invoke(target)
+                                isUploading = false
+                                uploadMessage = "Bukti terkirim. Menunggu verifikasi admin."
+                            } else {
+                                isUploading = true
+                                uploadMessage = "Menyiapkan file…"
+                                // val part = uriToMultipart(LocalContext.current.contentResolver, target, "bukti")
+                                // TODO: Repository.uploadBukti(transaksiId, part)
+                                isUploading = false
+                                uploadMessage = "Bukti siap diunggah (implement upload di Repository)."
+                            }
+                        },
+                        enabled = buktiUri != null && !isUploading,
+                        modifier = Modifier
+                            .fillMaxWidth(0.9f)     // ⬅️ tombol lebar tapi tetap simetris
+                            .height(48.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = BlueMain)
+                    ) {
+                        Text(
+                            text = if (isUploading) "Mengunggah…" else "Kirim Bukti",
+                            fontFamily = PoppinsSemi,
+                            color = Color.White
+                        )
+                    }
+                }
+
+
                 Spacer(Modifier.height(16.dp))
             }
         }
     }
 }
 
+<<<<<<< HEAD
+=======
+/* ===== Subcomponents ===== */
+
+>>>>>>> bea0ae5 (tambahan sisa halaman)
 @Composable
 private fun RincianRow(
     left: String,
@@ -252,6 +388,43 @@ private fun RincianRow(
     }
 }
 
+<<<<<<< HEAD
+=======
+/* ===== Utils: Uri -> Multipart (pakai di Repository/VM) ===== */
+fun uriToMultipart(
+    resolver: ContentResolver,
+    uri: Uri,
+    formFieldName: String
+): MultipartBody.Part {
+    val fileName = guessDisplayName(resolver, uri) ?: "bukti_${System.currentTimeMillis()}.jpg"
+    val mime = resolver.getType(uri) ?: "image/jpeg"
+    val bytes = readAllBytes(resolver.openInputStream(uri))
+    val body: RequestBody = bytes.toRequestBody(mime.toMediaTypeOrNull())
+    return MultipartBody.Part.createFormData(formFieldName, fileName, body)
+}
+
+private fun readAllBytes(inputStream: InputStream?): ByteArray {
+    inputStream ?: return ByteArray(0)
+    val buffer = ByteArrayOutputStream()
+    val data = ByteArray(8 * 1024)
+    var nRead: Int
+    while (inputStream.read(data).also { nRead = it } != -1) {
+        buffer.write(data, 0, nRead)
+    }
+    inputStream.close()
+    return buffer.toByteArray()
+}
+
+private fun guessDisplayName(resolver: ContentResolver, uri: Uri): String? {
+    val cursor = resolver.query(uri, arrayOf(android.provider.OpenableColumns.DISPLAY_NAME), null, null, null)
+    return cursor?.use {
+        val idx = it.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME)
+        if (idx >= 0 && it.moveToFirst()) it.getString(idx) else null
+    }
+}
+
+/* ===== Preview ===== */
+>>>>>>> bea0ae5 (tambahan sisa halaman)
 @Preview(showBackground = true, showSystemUi = true, backgroundColor = 0xFFFFFFFF)
 @Composable
 private fun PreviewPembayaran() {
